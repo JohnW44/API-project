@@ -6,7 +6,7 @@ import { FaUserCircle } from 'react-icons/fa';
 import * as sessionActions from '../../store/session';
 import OpenModalButton from '../OpenModalButton/OpenModalButton';
 import LoginFormModal from '../LoginFormModal/LoginFormModal';
-import SignupFormPage from '../SignupFormModal/SignupFormModal';
+import SignupFormModal  from '../SignupFormModal/SignupFormModal'
 
 
 

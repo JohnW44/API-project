@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import SignupFormPage from './components/SignupFormModal/SignupFormModal';
 import Navigation from './components/Navigation/Navigation';
-import LoginFormModal from './components/LoginFormModal/LoginFormModal';
+// import LoginFormModal from './components/LoginFormModal/LoginFormModal';
 import * as sessionActions from './store/session';
 
 function Layout() {
