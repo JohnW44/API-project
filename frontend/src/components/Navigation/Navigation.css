@@ -1,0 +1,61 @@
+.hidden {
+    display: none;
+  }
+
+  .profileBtn {
+    display: flex;
+    position: absolute;
+    right: 0;
+    flex-direction: row-reverse;
+    height: 50px;
+    width: 300px;
+  }
+
+  .topnav {
+    background-color: black;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    height: 60px; 
+  }
+  
+  .left-section {
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo {
+    height: 35px; 
+    width: auto;
+    margin-right: 10px;
+  }
+  
+  .site-name {
+    color: white;
+    text-decoration: none;
+    font-size: 1.2em;
+    font-weight: bold;
+  }
+  
+  .right-section {
+    display: flex;
+    align-items: center;
+  }
+  
+  .topnav a {
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+  }
+  
+  .topnav a:hover {
+    background-color: #ddd;
+    color: black;
+  }
+  
+ 

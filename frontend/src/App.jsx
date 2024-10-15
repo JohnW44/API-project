@@ -7,6 +7,7 @@ import SignupFormPage from './components/SignupFormModal/SignupFormModal';
 import Navigation from './components/Navigation/Navigation';
 // import LoginFormModal from './components/LoginFormModal/LoginFormModal';
 import * as sessionActions from './store/session';
+import LandingPage from './components/Landing Page/LandingPage';
 
 function Layout() {
   const dispatch = useDispatch();
@@ -32,7 +33,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <h1>Welcome!</h1>
+        element: <LandingPage />
       },
       {
         path: "signup",
