@@ -1,61 +1,89 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
 .hidden {
-    display: none;
-  }
+  display: none;
+}
 
-  .profileBtn {
-    display: flex;
-    position: absolute;
-    right: 0;
-    flex-direction: row-reverse;
-    height: 50px;
-    width: 300px;
-  }
+.profileBtn {
+  display: flex;
+  position: absolute;
+  right: 20px;
+  flex-direction: row-reverse;
+  height: 50px;
+  width: 300px;
+  cursor: pointer; /* This adds the pointer cursor */
+}
 
-  .topnav {
-    background-color: black;
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    height: 60px; 
-  }
-  
-  .left-section {
-    display: flex;
-    align-items: center;
-  }
-  
-  .logo {
-    height: 35px; 
-    width: auto;
-    margin-right: 10px;
-  }
-  
-  .site-name {
-    color: white;
-    text-decoration: none;
-    font-size: 1.2em;
-    font-weight: bold;
-  }
-  
-  .right-section {
-    display: flex;
-    align-items: center;
-  }
-  
-  .topnav a {
-    float: left;
-    color: #080808;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-    font-size: 17px;
-  }
-  
-  .topnav a:hover {
-    background-color: #ddd;
-    color: black;
-  }
-  
- 
+.profileBtn:hover {
+  opacity: 0.8; /* Optional: adds a hover effect */
+}
+
+.topnav {
+  background-color: black;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  height: 60px;
+  width: 100%; 
+  box-sizing: border-box; 
+  position: fixed; 
+  top: 0;
+  left: 0;
+  z-index: 1000; 
+}
+
+.left-section {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  height: 35px; 
+  width: auto;
+  margin-right: 10px;
+}
+
+.site-name {
+  color: white;
+  text-decoration: none;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.right-section {
+  display: flex;
+  align-items: center;
+}
+
+.topnav a {
+  color: white; 
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #333; 
+  color: white;
+}
+
+
+main {
+  margin-top: 60px; 
+}
+
+.profile-icon {
+  cursor: pointer;
+}
+
+/* If you want to add additional hover effects, you can do so like this: */
+.profile-icon:hover {
+  opacity: 0.8; /* This will make the icon slightly transparent on hover */
+}

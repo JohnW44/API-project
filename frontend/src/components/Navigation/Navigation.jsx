@@ -16,7 +16,6 @@ function Navigation({ isLoaded }) {
         <NavLink to="/" className="site-name">SpookySpots</NavLink>
       </div>
       <div className='center-section'>
-        <Link to="/spots" className="nav-link">All Spots</Link>
         {sessionUser && <Link to="/spots/new" className="nav-link">Create a Spot</Link>}
       </div>
       {isLoaded && (

@@ -1,9 +1,9 @@
 import './SpotDetails.css';
-import React, { useEffect, useState } from 'react';
+import { faker } from '@faker-js/faker';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchSpotDetails } from '../../store/spots';
-import { faker } from '@faker-js/faker';
 
 function SpotDetails() {
   const { spotId } = useParams();
@@ -48,7 +48,7 @@ function SpotDetails() {
     'https://via.placeholder.com/300x200?text=Image+5'
   ];
 
-  const lorem = faker.lorem;
+  
 
 
   return (
@@ -76,11 +76,12 @@ function SpotDetails() {
         <div className="booking-box">
           <div className="booking-header">
             <span className="price">${spot.price} / night</span>
-            <span className="rating">★ {formatRating(spot.avgStarRating)}</span>
-            <span className="reviews">· {spot.numReviews || 0} reviews</span>
+            <div className="rating-reviews">
+              <span className="rating">★ {formatRating(spot.avgStarRating)}</span>
+              <span className="reviews">· {spot.numReviews || 0} reviews</span>
+            </div>
           </div>
-          {/* Updated button with onClick handler */}
-          <button className="reserve-button" onClick={handleReserveClick}>Reserve</button>
+        <button className="reserve-button" onClick={handleReserveClick}>Reserve</button>
         </div>
       </div>
     </div>
