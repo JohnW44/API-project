@@ -1,0 +1,117 @@
+.spot-details {
+  max-width: 1000px;
+  margin: 20px auto;
+  padding: 0 20px;
+}
+
+h1 {
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+
+.spot-location {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.spot-images {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  height: 400px;
+}
+
+.main-image {
+  flex: 1;
+  max-width: 50%;
+  height: 100%;
+}
+
+.main-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.secondary-images {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 10px;
+  height: 100%;
+}
+
+.secondary-image {
+  height: 100%;
+}
+
+.secondary-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.spot-details-container {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.spot-info {
+  flex: 2;
+}
+
+.spot-info h2 {
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+.spot-info p {
+  margin-bottom: 15px;
+  line-height: 1.5;
+}
+
+.booking-box {
+  flex: 1;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.booking-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.price {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.rating, .reviews {
+  font-size: 14px;
+}
+
+.reserve-button {
+  background-color: #ff385c;
+  color: white;
+  border: none;
+  padding: 15px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.reserve-button:hover {
+  background-color: #e31c5f;
+}

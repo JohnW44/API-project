@@ -1,12 +1,13 @@
+import './index.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
-import App from './App';
-import './index.css';
-import configureStore from './store/store';
-import { restoreCSRF, csrfFetch } from './store/csrf';
-import * as sessionActions from './store/session';
 import { ModalProvider, Modal } from './context/Modal';
+import { restoreCSRF, csrfFetch } from './store/csrf';
+import App from './App.jsx';
+import configureStore from './store/store';
+import * as sessionActions from './store/session';
+
 
 const store = configureStore();
 
