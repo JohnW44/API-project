@@ -11,27 +11,17 @@ module.exports = {
     await queryInterface.bulkInsert(options, [
       {
         spotId: 1,
-        url: '../../../../images/1 Laveta Place.png',
+        url: 'https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg',
         preview: true,
       },
       {
         spotId: 2,
-        url: '../../../../images/Villa Montezuma.png',
+        url: 'https://images.pexels.com/photos/2121121/pexels-photo-2121121.jpeg',
         preview: true,
       },
       {
         spotId: 3,
-        url: '../../../../images/Ballealy-Cottage06.png',
-        preview: true,
-      },
-      {
-        spotId: 4,
-        url: '../../../../images/BaconsCastle.png',
-        preview: true,
-      },
-      {
-        spotId: 5,
-        url: '../../../../images/Rosenheim_Mansion.png',
+        url: 'https://images.pexels.com/photos/2121121/pexels-photo-2121121.jpeg',
         preview: true,
       },
     ]);
