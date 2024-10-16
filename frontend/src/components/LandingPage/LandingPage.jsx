@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSpots } from '../../store/spots';
 import { useNavigate } from 'react-router-dom';
-import backgroundImage from '../../../../images/HomePageBackground.png';
+// import backgroundImage from '../../../../images/HomePageBackground.png';
 
 function LandingPage() {
   const dispatch = useDispatch();

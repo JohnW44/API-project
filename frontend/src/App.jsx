@@ -6,7 +6,8 @@ import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import SignupFormPage from './components/SignupFormModal/SignupFormModal';
 import Navigation from './components/Navigation/Navigation';
 // import LoginFormModal from './components/LoginFormModal/LoginFormModal';
-import SpotDetails from './components/SpotDetails/SpotDetails';
+import { default as SpotDetails } from './components/SpotDetails/SpotDetails';
+
 import LandingPage from './components/LandingPage/LandingPage';
 import * as sessionActions from './store/session';
 

@@ -4,20 +4,28 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchSpotDetails } from '../../store/spots';
+import { fetchSpotReviews } from '../../store/reviews';
 
-function SpotDetails() {
+export function SpotDetails() {
   const { spotId } = useParams();
   const dispatch = useDispatch();
   const spot = useSelector(state => state.spots.currentSpot);
   const [isLoading, setIsLoading] = useState(true);
+  const reviews = useSelector(state => {
+    console.log('Full Redux State:', state);
+    return state.reviews?.spotReviews || [];
+  });
+  
+  console.log('Reviews:', reviews);
 
   useEffect(() => {
-    dispatch(fetchSpotDetails(spotId))
-      .then(() => setIsLoading(false))
-      .catch(error => {
-        console.error('Error fetching spot details:', error);
-        setIsLoading(false);
-      });
+    const fetchData = async () => {
+      setIsLoading(true);
+      await dispatch(fetchSpotDetails(spotId));
+      await dispatch(fetchSpotReviews(spotId));
+      setIsLoading(false);
+    };
+    fetchData();
   }, [dispatch, spotId]);
 
   const formatRating = (rating) => {
@@ -27,9 +35,13 @@ function SpotDetails() {
     return typeof rating === 'number' ? rating.toFixed(1) : rating.toString();
   };
 
-  // New function to handle button click
   const handleReserveClick = () => {
     alert("Feature Coming Soon...");
+  };
+
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'long' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
   if (isLoading) {
@@ -47,9 +59,6 @@ function SpotDetails() {
     'https://via.placeholder.com/300x200?text=Image+4',
     'https://via.placeholder.com/300x200?text=Image+5'
   ];
-
-  
-
 
   return (
     <div className="spot-details">
@@ -82,6 +91,25 @@ function SpotDetails() {
             </div>
           </div>
         <button className="reserve-button" onClick={handleReserveClick}>Reserve</button>
+        </div>
+      </div>
+      <div className="reviews-section">
+        <hr className="reviews-divider" />
+        <div className="reviews-header">
+          <h2>★ {formatRating(spot.avgStarRating)} · {spot.numReviews} reviews</h2>
+        </div>
+        <div className="reviews-list">
+          {reviews.length > 0 ? (
+            reviews.map(review => (
+              <div key={review.id} className="review-item">
+                <h3>{review.User?.firstName || 'Anonymous'}</h3>
+                <p className="review-date">{formatDate(review.createdAt)}</p>
+                <p className="review-text">{review.review || 'No review text'}</p>
+              </div>
+            ))
+          ) : (
+            <p>No reviews yet.</p>
+          )}
         </div>
       </div>
     </div>

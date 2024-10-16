@@ -37,7 +37,7 @@ const initialState = { Spots: [], currentSpot: null, page: 1, size: 20 };
 const spotsReducer = (state = initialState, action) => {
   switch (action.type) {  
     case LOAD_SPOTS:
-      return action.spotsData;
+      return { ...state, Spots: action.spotsData.Spots };
     case LOAD_SPOT_DETAILS:
       return { ...state, currentSpot: action.spotDetails };
     default:
