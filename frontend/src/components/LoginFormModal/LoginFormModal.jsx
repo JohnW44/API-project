@@ -40,8 +40,15 @@ function LoginFormModal({ navigate }) {
         closeModal();
         navigate('/');
       })
-      .catch((error) => {
-        setError("Unable to log in as demo user.");
+      .catch(async (res) => {
+        if (res && res.json) {
+          const data = await res.json();
+          if (data && data.errors) {
+            setError(data.errors.credential || "Unable to log in as demo user.");
+          }
+        } else {
+          setError("Unable to log in as demo user.");
+        }
       });
   };
 
