@@ -1,34 +1,37 @@
 // frontend/src/components/LoginFormModal/LoginFormModal.jsx
 
+import './LoginForm.css';
 import { useState } from 'react';
 import * as sessionActions from '../../store/session';
 import { useDispatch } from 'react-redux';
 import { useModal } from '../../context/Modal';
-import './LoginForm.css';
 
 function LoginFormModal() {
   const dispatch = useDispatch();
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({});
+  const [error, setError] = useState("");
   const { closeModal } = useModal();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setErrors({});
+    setError("");
     return dispatch(sessionActions.login({ credential, password }))
       .then(closeModal)
       .catch(async (res) => {
         const data = await res.json();
         if (data && data.errors) {
-          setErrors(data.errors);
+          setError("The provided credentials were invalid.");
         }
       });
   };
 
+  const isFormValid = credential.length >= 4 && password.length >= 6;
+ 
   return (
-    <>
+    <div className="login-form-modal">
       <h1>Log In</h1>
+      {error && <p className="credential-error">{error}</p>}
       <form onSubmit={handleSubmit}>
         <label>
           Username or Email
@@ -48,12 +51,9 @@ function LoginFormModal() {
             required
           />
         </label>
-        {errors.credential && (
-          <p>{errors.credential}</p>
-        )}
-        <button type="submit">Log In</button>
+        <button type="submit" disabled={!isFormValid}>Log In</button>
       </form>
-    </>
+    </div>
   );
 }
 
