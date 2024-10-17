@@ -15,11 +15,11 @@ body, html {
   flex-direction: row-reverse;
   height: 50px;
   width: 300px;
-  cursor: pointer; /* This adds the pointer cursor */
+  cursor: pointer;
 }
 
 .profileBtn:hover {
-  opacity: 0.8; /* Optional: adds a hover effect */
+  cursor: pointer;
 }
 
 .topnav {
@@ -28,7 +28,7 @@ body, html {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
+  padding: 10px 19px;
   height: 60px;
   width: 100%; 
   box-sizing: border-box; 
@@ -43,10 +43,21 @@ body, html {
   align-items: center;
 }
 
+.logo-link {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+
+.topnav .logo-link:hover {
+  background-color: transparent;
+}
+
 .logo {
-  height: 35px; 
+  height: 48px; 
   width: auto;
-  margin-right: 10px;
+  margin-right: 8px;
 }
 
 .site-name {
@@ -83,7 +94,5 @@ main {
   cursor: pointer;
 }
 
-/* If you want to add additional hover effects, you can do so like this: */
-.profile-icon:hover {
-  opacity: 0.8; /* This will make the icon slightly transparent on hover */
-}
+
+

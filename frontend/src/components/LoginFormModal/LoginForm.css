@@ -1,6 +1,6 @@
 .login-form-modal {
   background-color: white;
-  padding: 20px;
+  padding: 19px;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   width: 300px;
@@ -65,4 +65,19 @@
   margin-top: 10px;
   margin-bottom: 10px;
   text-align: center;
+}
+
+.demo-user {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.demo-user a {
+  color: #ff385c;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.demo-user a:hover {
+  text-decoration: underline;
 }

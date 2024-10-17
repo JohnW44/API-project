@@ -6,7 +6,7 @@ import * as sessionActions from '../../store/session';
 import { useDispatch } from 'react-redux';
 import { useModal } from '../../context/Modal';
 
-function LoginFormModal() {
+function LoginFormModal({ navigate }) {
   const dispatch = useDispatch();
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
@@ -17,12 +17,31 @@ function LoginFormModal() {
     e.preventDefault();
     setError("");
     return dispatch(sessionActions.login({ credential, password }))
-      .then(closeModal)
+      .then(() => {
+        closeModal();
+        navigate('/');
+      })
       .catch(async (res) => {
-        const data = await res.json();
-        if (data && data.errors) {
-          setError("The provided credentials were invalid.");
+        if (res && res.json) {
+          const data = await res.json();
+          if (data && data.errors) {
+            setError(data.errors.credential);
+          }
+        } else {
+          setError("An error occurred. Please try again.");
         }
+      });
+  };
+
+  const handleDemoUser = (e) => {
+    e.preventDefault();
+    return dispatch(sessionActions.login({ credential: "demo@user.io", password: "password" }))
+      .then(() => {
+        closeModal();
+        navigate('/');
+      })
+      .catch((error) => {
+        setError("Unable to log in as demo user.");
       });
   };
 
@@ -53,6 +72,9 @@ function LoginFormModal() {
         </label>
         <button type="submit" disabled={!isFormValid}>Log In</button>
       </form>
+      <div className="demo-user">
+        <a href="#" onClick={handleDemoUser}>Demo User</a>
+      </div>
     </div>
   );
 }

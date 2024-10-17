@@ -10,7 +10,7 @@ import SignupFormModal  from '../SignupFormModal/SignupFormModal'
 
 
 
-function ProfileButton({ user }) {
+function ProfileButton({ user, navigate }) {
     const dispatch = useDispatch();
     const [showMenu, setShowMenu] = useState(false);
     const ulRef = useRef();
@@ -65,7 +65,7 @@ function ProfileButton({ user }) {
             <OpenModalButton
               buttonText="Log In"
               onButtonClick={closeMenu}
-              modalComponent={<LoginFormModal />}
+              modalComponent={<LoginFormModal navigate={navigate} />}
             />
           </li>
           <li>
