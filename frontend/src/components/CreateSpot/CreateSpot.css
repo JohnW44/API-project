@@ -42,6 +42,7 @@
   margin-top: 5px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  box-sizing: border-box;
 }
 
 .create-spot textarea {
@@ -52,26 +53,33 @@
 .lat-lng {
   display: flex;
   justify-content: space-between;
+  gap: 20px;
 }
 
 .city-state label,
 .lat-lng label {
-  width: 48%;
+  flex: 1;
 }
 
 .create-spot button {
   background-color: #ff385c;
   color: white;
-  padding: 12px;
-  border: 1px solid #ccc;
+  padding: 12px 20px;
+  border: 1px solid #ff385c;
   border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
   margin-top: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 2, 1.5);
+  transition: all 0.3s ease;
+  width: fit-content;
+  align-self: center;
 }
 
 .create-spot button:hover {
   background-color: #e31c5f;
+  border-color: #e31c5f;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .error {
@@ -79,4 +87,11 @@
   font-size: 0.8em;
   margin-top: 5px;
   margin-bottom: 5px;
+}
+
+.section-divider {
+  border: none;
+  border-top: 3px solid #000000;
+  margin: 20px 0;
+  width: 100%;
 }

@@ -10,7 +10,6 @@ body, html {
 
 .profileBtn {
   display: flex;
-  position: absolute;
   right: 20px;
   flex-direction: row-reverse;
   height: 50px;
@@ -33,9 +32,6 @@ body, html {
   width: 100%; 
   box-sizing: border-box; 
   position: fixed; 
-  top: 0;
-  left: 0;
-  z-index: 1000; 
 }
 
 .left-section {
@@ -70,6 +66,7 @@ body, html {
 .right-section {
   display: flex;
   align-items: center;
+  gap: 10px; 
 }
 
 .topnav a {
@@ -81,18 +78,26 @@ body, html {
 }
 
 .topnav a:hover {
-  background-color: #333; 
-  color: white;
+  background-color: transparent; 
+  color: white; 
 }
 
 
 main {
-  margin-top: 60px; 
+  margin-top: 65px; 
 }
 
 .profile-icon {
   cursor: pointer;
 }
 
+.create-spot-link {
+  color: white;
+  border-radius: 10px;
+  background-color: #312f2f; 
+  transition: none; 
+}
 
-
+.create-spot-link:hover {
+  background-color: #ff385c; 
+}

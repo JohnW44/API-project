@@ -17,13 +17,11 @@ function Navigation({ isLoaded }) {
         </Link>
         <NavLink to="/" className="site-name">SpookySpots</NavLink>
       </div>
-      <div className='center-section'>
-        {sessionUser && (
-          <NavLink to="/spots/new" className="nav-link">Create a New Spot</NavLink>
-        )}
-      </div>
       {isLoaded && (
         <div className='right-section'>
+          {sessionUser && (
+            <NavLink to="/spots/new" className="create-spot-link">Create a New Spot</NavLink>
+          )}
           <ProfileButton user={sessionUser} navigate={navigate} />
         </div>
       )}    

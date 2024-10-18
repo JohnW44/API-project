@@ -1,8 +1,8 @@
+import './CreateSpot.css';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useModal } from '../../context/Modal';
-import './CreateSpot.css';
 
 
 function CreateSpot() {
@@ -116,6 +116,7 @@ function CreateSpot() {
             </label>
           </div>
         </section>
+        <hr className="section-divider" />
 
         <section>
           <h2>Describe your place to guests</h2>
@@ -128,7 +129,7 @@ function CreateSpot() {
             placeholder="Please write at least 30 characters"
           />
         </section>
-
+        <hr className="section-divider" />
         <section>
           <h2>Create a title for your spot</h2>
           <p>Catch guests&apos; attention with a spot title that highlights what makes your place special.</p>
@@ -141,7 +142,7 @@ function CreateSpot() {
             placeholder="Name of your spot"
           />
         </section>
-
+        <hr className="section-divider" />
         <section>
           <h2>Set a base price for your spot</h2>
           <p>Competitive pricing can help your listing stand out and rank higher in search results.</p>
@@ -151,7 +152,7 @@ function CreateSpot() {
             <input type="number" value={price} onChange={(e) => setPrice(e.target.value)} min="0" step="0.01" />
           </label>
         </section>
-
+        <hr className="section-divider" />
         <section>
           <h2>Liven up your spot with photos</h2>
           <p>Submit a link to at least one photo to publish your spot.</p>
@@ -167,6 +168,7 @@ function CreateSpot() {
           <input type="url" value={image3} onChange={(e) => setImage3(e.target.value)} placeholder="Image URL" />
           <input type="url" value={image4} onChange={(e) => setImage4(e.target.value)} placeholder="Image URL" />
         </section>
+        <hr className="section-divider" />
 
         <button type="submit">Create Spot</button>
       </form>
