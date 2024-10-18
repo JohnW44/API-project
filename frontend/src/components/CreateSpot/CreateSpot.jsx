@@ -1,17 +1,21 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useModal } from '../../context/Modal';
 import './CreateSpot.css';
 
 
 function CreateSpot() {
   const navigate = useNavigate();
   const sessionUser = useSelector(state => state.session.user);
+  const { closeModal } = useModal();
 
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
   const [country, setCountry] = useState('');
+  const [lat, setLat] = useState('');
+  const [lng, setLng] = useState('');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
@@ -24,10 +28,27 @@ function CreateSpot() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrors({});
+    const newErrors = {};
+    if (!country) newErrors.country = "Country is required";
+    if (!address) newErrors.address = "Address is required";
+    if (!city) newErrors.city = "City is required";
+    if (!state) newErrors.state = "State is required";
+    if (!description) newErrors.description = "Description is required";
+    if (!name) newErrors.name = "Name is required";
+    if (!price) newErrors.price = "Price is required";
+    if (!previewImage) {
+      newErrors.previewImage = "Preview image is required";
+    } else {
+      const validExtensions = ['.png', '.jpg', '.jpeg'];
+      const extension = previewImage.slice(previewImage.lastIndexOf('.')).toLowerCase();
+      if (!validExtensions.includes(extension)) {
+        newErrors.previewImage = "Image URL must end in .png, .jpg, or .jpeg";
+      }
+    }
 
-    if (!sessionUser) {
-      setErrors({ user: "You must be logged in to create a spot." });
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) {
       return;
     }
 
@@ -40,12 +61,15 @@ function CreateSpot() {
       city,
       state,
       country,
+      lat: lat ? parseFloat(lat) : null,
+      lng: lng ? parseFloat(lng) : null,
       previewImage
     };
 
     try {
       console.log('Spot created:', newSpot);
-      navigate('/');
+      closeModal();
+      navigate('/'); 
     } catch (error) {
       console.error('Failed to create spot:', error);
       setErrors(error.errors || { general: "An error occurred while creating the spot." });
@@ -55,28 +79,40 @@ function CreateSpot() {
   return (
     <div className="create-spot">
       <h1>Create a new Spot</h1>
-      {errors.user && <p className="error">{errors.user}</p>}
-      {errors.general && <p className="error">{errors.general}</p>}
       <form onSubmit={handleSubmit}>
         <section>
           <h2>Where&apos;s your place located?</h2>
           <p>Guests will only get your exact address once they&apos;ve booked a reservation.</p>
           <label>
             Country
-            <input type="text" value={country} onChange={(e) => setCountry(e.target.value)} required />
+            {errors.country && <p style={{color: 'red'}}>{errors.country}</p>}
+            <input type="text" value={country} onChange={(e) => setCountry(e.target.value)} />
           </label>
           <label>
             Street Address
-            <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} required />
+            {errors.address && <p style={{color: 'red'}}>{errors.address}</p>}
+            <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} />
           </label>
           <div className="city-state">
             <label>
               City
-              <input type="text" value={city} onChange={(e) => setCity(e.target.value)} required />
+              {errors.city && <p style={{color: 'red'}}>{errors.city}</p>}
+              <input type="text" value={city} onChange={(e) => setCity(e.target.value)} />
             </label>
             <label>
               State
-              <input type="text" value={state} onChange={(e) => setState(e.target.value)} required />
+              {errors.state && <p style={{color: 'red'}}>{errors.state}</p>}
+              <input type="text" value={state} onChange={(e) => setState(e.target.value)} />
+            </label>
+          </div>
+          <div className="lat-lng">
+            <label>
+              Latitude
+              <input type="number" value={lat} onChange={(e) => setLat(e.target.value)} step="any" />
+            </label>
+            <label>
+              Longitude
+              <input type="number" value={lng} onChange={(e) => setLng(e.target.value)} step="any" />
             </label>
           </div>
         </section>
@@ -84,10 +120,10 @@ function CreateSpot() {
         <section>
           <h2>Describe your place to guests</h2>
           <p>Mention the best features of your space, any special amenities like fast wifi or parking, and what you love about the neighborhood.</p>
+          {errors.description && <p style={{color: 'red'}}>{errors.description}</p>}
           <textarea 
             value={description} 
             onChange={(e) => setDescription(e.target.value)} 
-            required 
             minLength="30"
             placeholder="Please write at least 30 characters"
           />
@@ -96,11 +132,11 @@ function CreateSpot() {
         <section>
           <h2>Create a title for your spot</h2>
           <p>Catch guests&apos; attention with a spot title that highlights what makes your place special.</p>
+          {errors.name && <p style={{color: 'red'}}>{errors.name}</p>}
           <input 
             type="text" 
             value={name} 
             onChange={(e) => setName(e.target.value)} 
-            required 
             maxLength="50"
             placeholder="Name of your spot"
           />
@@ -110,15 +146,22 @@ function CreateSpot() {
           <h2>Set a base price for your spot</h2>
           <p>Competitive pricing can help your listing stand out and rank higher in search results.</p>
           <label>
-            $ <input type="number" value={price} onChange={(e) => setPrice(e.target.value)} required min="0" step="0.01" />
+            $ 
+            {errors.price && <p style={{color: 'red'}}>{errors.price}</p>}
+            <input type="number" value={price} onChange={(e) => setPrice(e.target.value)} min="0" step="0.01" />
           </label>
         </section>
 
         <section>
           <h2>Liven up your spot with photos</h2>
           <p>Submit a link to at least one photo to publish your spot.</p>
-          <input type="url" value={previewImage} onChange={(e) => setPreviewImage(e.target.value)} required placeholder="Preview Image URL" />
-          {errors.previewImage && <p className="error">{errors.previewImage}</p>}
+          <input 
+            type="url" 
+            value={previewImage} 
+            onChange={(e) => setPreviewImage(e.target.value)} 
+            placeholder="Preview Image URL" 
+          />
+          {errors.previewImage && <p style={{color: 'red'}}>{errors.previewImage}</p>}
           <input type="url" value={image1} onChange={(e) => setImage1(e.target.value)} placeholder="Image URL" />
           <input type="url" value={image2} onChange={(e) => setImage2(e.target.value)} placeholder="Image URL" />
           <input type="url" value={image3} onChange={(e) => setImage3(e.target.value)} placeholder="Image URL" />
