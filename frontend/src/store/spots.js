@@ -87,13 +87,14 @@ const spotsReducer = (state = initialState, action) => {
                     [action.spot.id]: action.spot
                 }
             };
-        case DELETE_SPOT:
+        case DELETE_SPOT: {
             const newSpotsObj = { ...state.spotsObj };
             delete newSpotsObj[action.spot.id];
             return {
                 ...state,
                 spotsObj: newSpotsObj
             };
+        } 
         default:
             return state;
     }

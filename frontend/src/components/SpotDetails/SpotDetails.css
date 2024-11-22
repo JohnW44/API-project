@@ -1,3 +1,8 @@
+body {
+  background-color: #5bc0f0;
+}
+
+
 .spot-details {
   max-width: 1000px;
   margin: 80px auto 20px;
@@ -103,12 +108,11 @@ h1 {
 .rating-reviews {
   display: flex;
   align-items: center;
-  font-size: 14px;
-  margin-bottom: 2px;
+  font-size: 14px;      
 }
 
 .rating {
-  margin-right: 3px;
+  margin-right: 5px;
 }
 
 .reviews {
@@ -143,10 +147,35 @@ h1 {
   margin: 20px 0;
 }
 
-.reviews-header h2 {
-  font-size: 22px;
-  font-weight: bold;
+.reviews-header {
   margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.reviews-summary {
+  display: flex;
+  align-items: center;
+}
+
+.review-button-container {
+  margin-top: 5px;
+}
+
+.post-review-button {
+  background-color: #ff2727;
+  color: rgb(255, 113, 113);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.post-review-button:hover {
+  background-color: #777777;
 }
 
 .reviews-list {
@@ -170,7 +199,7 @@ h1 {
   color: #000000;
   font-size: 15px;
   font-weight: bold;
-  margin-bottom: 9px;
+  margin-bottom: 5px;
 }
 
 .review-text {

@@ -21,12 +21,28 @@ export const fetchSpotReviews = (spotId) => async (dispatch) => {
   }
 };
 
-const initialState = { spotReviews: [] };
+const initialState = {
+  state: {
+    reviewsObj: {},
+    currentSpotReviews: []
+  }
+};
 
 const reviewsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case LOAD_SPOT_REVIEWS:
-      return { ...state, spotReviews: action.reviews };
+    case LOAD_SPOT_REVIEWS: {
+      const reviewsObj = {};
+      action.reviews.forEach(review => {
+        reviewsObj[review.id] = review;
+      });
+      return {
+        ...state,
+        state: {
+          reviewsObj,
+          currentSpotReviews: action.reviews.map(review => review.id)
+        }
+      };
+    }
     default:
       return state;
   }

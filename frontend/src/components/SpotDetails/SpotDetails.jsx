@@ -1,10 +1,12 @@
-import './SpotDetails.css';
 import { faker } from '@faker-js/faker';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchSpotDetails } from '../../store/spots';
 import { fetchSpotReviews } from '../../store/reviews';
+import OpenModalButton from '../OpenModalButton/OpenModalButton';
+import PostReviewModal from '../PostReviewModal/PostReviewModal';
+import './SpotDetails.css';
 
 export function SpotDetails() {
   const { spotId } = useParams();
@@ -12,8 +14,8 @@ export function SpotDetails() {
   const spot = useSelector(state => state.spots.spotsObj[spotId]);
   const [isLoading, setIsLoading] = useState(true);
   const reviews = useSelector(state => {
-    console.log('Full Redux State:', state);
-    return state.reviews?.spotReviews || [];
+    const reviewIds = state.reviews.state.currentSpotReviews;
+    return reviewIds.map(id => state.reviews.state.reviewsObj[id]);
   });
   const currentUser = useSelector(state => state.session.user);
   
@@ -46,6 +48,8 @@ export function SpotDetails() {
   };
 
   const isOwner = currentUser && spot && currentUser.id === spot.ownerId;
+
+  const canReview = currentUser && !isOwner && !reviews.some(review => review.userId === currentUser.id);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -99,7 +103,18 @@ export function SpotDetails() {
       <div className="reviews-section">
         <hr className="reviews-divider" />
         <div className="reviews-header">
-          <h2>★ {formatRating(spot.avgStarRating)} · {spot.numReviews} reviews</h2>
+          <div className="reviews-summary">
+            <h2>★ {formatRating(spot.avgStarRating)} · {spot.numReviews} reviews</h2>
+          </div>
+          {canReview && (
+            <div className="review-button-container">
+              <OpenModalButton
+                buttonText="Post Your Review"
+                modalComponent={<PostReviewModal spotId={spotId} />}
+                className="post-review-button"
+              />
+            </div>
+          )}
         </div>
         <div className="reviews-list">
           {reviews.length > 0 ? (
@@ -111,7 +126,7 @@ export function SpotDetails() {
               </div>
             ))
           ) : (
-            <p>No reviews yet.</p>
+            <p>Be the first to post a review!</p>
           )}
         </div>
       </div>

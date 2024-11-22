@@ -1,0 +1,77 @@
+.post-review-modal {
+  background-color: rgb(64, 170, 64);
+  padding: 20px;
+  width: 400px;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.post-review-modal h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: rgb(223, 54, 96);
+}
+
+.post-review-modal form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.post-review-modal textarea {
+  width: 350px;
+  height: 100px;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #000000;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.stars-input {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.star {
+  font-size: 24px;
+  cursor: pointer;
+  color: #ccc;
+}
+
+.star:hover {
+  color: rgb(221, 111, 129)
+}
+
+.star.filled {
+  color: #ff0000;
+}
+
+
+.error {
+  color: red;
+  font-size: 12px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.post-review-modal button   {
+  width: 350px;
+  padding: 10px;
+  background-color: rgb(132, 227, 240);
+  color: #ff385c;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 4px 8px;
+}
+
+.post-review-modal button:hover {
+  background-color: #ff385c;
+  color: rgb(132, 227, 240)
+}
