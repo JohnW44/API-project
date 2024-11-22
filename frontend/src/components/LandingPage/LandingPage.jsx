@@ -9,12 +9,19 @@ import { useNavigate } from 'react-router-dom';
 function LandingPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const spotsData = useSelector(state => state.spots);
+  const spots = useSelector(state => state.spots.Spots);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    dispatch(fetchSpots()).then(() => setIsLoading(false));
-  }, [dispatch]);
+    const loadSpots = async () => {
+      if (!spots.length) {
+        await dispatch(fetchSpots());
+      }
+      setIsLoading(false);
+    };
+    
+    loadSpots();
+  }, [dispatch, spots.length]);
 
   const handleSpotClick = (spotId) => {
     navigate(`/spots/${spotId}`);
@@ -24,11 +31,9 @@ function LandingPage() {
     return <div>Loading...</div>;
   }
 
-  if (!spotsData || !spotsData.Spots || spotsData.Spots.length === 0) {
+  if (!spots || !spots.length) {
     return <div>No spots available</div>;
   }
-
-  const spots = spotsData.Spots;
 
   return (
     <div className="landing-page">

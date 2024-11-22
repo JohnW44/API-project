@@ -15,6 +15,7 @@ export function SpotDetails() {
     console.log('Full Redux State:', state);
     return state.reviews?.spotReviews || [];
   });
+  const currentUser = useSelector(state => state.session.user);
   
   console.log('Reviews:', reviews);
 
@@ -43,6 +44,8 @@ export function SpotDetails() {
     const options = { year: 'numeric', month: 'long' };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
+
+  const isOwner = currentUser && spot && currentUser.id === spot.ownerId;
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -112,6 +115,12 @@ export function SpotDetails() {
           )}
         </div>
       </div>
+      {isOwner && (
+        <div className="owner-actions">
+          <button onClick={() => {/* Handle edit */}}>Edit Spot</button>
+          <button onClick={() => {/* Handle delete */}}>Delete Spot</button>
+        </div>
+      )}
     </div>
   );
 }
