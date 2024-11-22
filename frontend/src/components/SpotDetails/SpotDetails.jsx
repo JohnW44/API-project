@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchSpotDetails } from '../../store/spots';
-import { fetchSpotReviews } from '../../store/reviews';
+import { fetchSpotReviews, deleteReview } from '../../store/reviews';
 import OpenModalButton from '../OpenModalButton/OpenModalButton';
 import PostReviewModal from '../PostReviewModal/PostReviewModal';
 import './SpotDetails.css';
@@ -50,6 +50,12 @@ export function SpotDetails() {
   const isOwner = currentUser && spot && currentUser.id === spot.ownerId;
 
   const canReview = currentUser && !isOwner && !reviews.some(review => review.userId === currentUser.id);
+
+  const handleDeleteReview = async (reviewId) => {
+    await dispatch(deleteReview(reviewId));
+    await dispatch(fetchSpotReviews(spotId));
+    await dispatch(fetchSpotDetails(spotId))
+  };
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -123,6 +129,14 @@ export function SpotDetails() {
                 <h3>{review.User?.firstName || 'Anonymous'}</h3>
                 <p className="review-date">{formatDate(review.createdAt)}</p>
                 <p className="review-text">{review.review || 'No review text'}</p>
+                {currentUser && review.userId === currentUser.id && (
+                  <button 
+                    onClick={() => handleDeleteReview(review.id)}
+                    className="delete-review-button"
+                  >
+                    Delete Review
+                  </button>
+                )}
               </div>
             ))
           ) : (

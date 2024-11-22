@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useModal } from '../../context/Modal';
+import { fetchSpotDetails } from '../../store/spots';
+import { createReview } from '../../store/reviews';
 import './PostReviewModal.css';
 
 function PostReviewModal({ spotId }) {
@@ -14,7 +16,6 @@ function PostReviewModal({ spotId }) {
     e.preventDefault();
     setErrors({});
 
-    // Validation
     if (review.length < 10) {
       setErrors(prev => ({ ...prev, review: "Review must be at least 10 characters long" }));
       return;
@@ -24,9 +25,16 @@ function PostReviewModal({ spotId }) {
       return;
     }
 
-    // TODO: Add the dispatch to create review here
-    closeModal();
+   const newReview = await dispatch(createReview({
+      review,
+      stars
+    }, spotId));
+
+    if (newReview) { await dispatch(fetchSpotDetails(spotId))
+      closeModal();
+    }
   };
+
 
   return (
     <div className="post-review-modal">
