@@ -38,7 +38,11 @@ function CreateSpot() {
     if (!address) newErrors.address = "Address is required";
     if (!city) newErrors.city = "City is required";
     if (!state) newErrors.state = "State is required";
-    if (!description) newErrors.description = "Description is required";
+    if (!description) {
+      newErrors.description = "Description is required";}
+      else if(description.length < 30){
+        newErrors.description = "Description needs 30 or more characters"
+      }
     if (!name) newErrors.name = "Name is required";
     if (!price) newErrors.price = "Price is required";
     if (!previewImage) {
@@ -180,8 +184,6 @@ function CreateSpot() {
           <textarea 
             value={description} 
             onChange={(e) => setDescription(e.target.value)} 
-            minLength="30"
-            placeholder="Please write at least 30 characters"
           />
         </section>
         <hr className="section-divider" />

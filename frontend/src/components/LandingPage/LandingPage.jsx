@@ -1,6 +1,6 @@
 // import HauntedHouseLogo from '../../../../images/Gcds-Halloween-Haunted-house.ico';     
 import './LandingPage.css';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSpots } from '../../store/spots';
 import { useNavigate } from 'react-router-dom';
@@ -9,31 +9,19 @@ import { useNavigate } from 'react-router-dom';
 function LandingPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const spots = useSelector(state => state.spots.Spots);
-  const [isLoading, setIsLoading] = useState(true);
+  const spots = useSelector(state => Object.values(state.spots.spotsObj));
 
   useEffect(() => {
     const loadSpots = async () => {
-      if (!spots.length) {
-        await dispatch(fetchSpots());
-      }
-      setIsLoading(false);
+      await dispatch(fetchSpots());
     };
     
     loadSpots();
-  }, [dispatch, spots.length]);
+  }, [dispatch]);
 
   const handleSpotClick = (spotId) => {
     navigate(`/spots/${spotId}`);
   };
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!spots || !spots.length) {
-    return <div>No spots available</div>;
-  }
 
   return (
     <div className="landing-page">

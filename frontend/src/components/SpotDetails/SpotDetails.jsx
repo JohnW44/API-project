@@ -9,7 +9,7 @@ import { fetchSpotReviews } from '../../store/reviews';
 export function SpotDetails() {
   const { spotId } = useParams();
   const dispatch = useDispatch();
-  const spot = useSelector(state => state.spots.currentSpot);
+  const spot = useSelector(state => state.spots.spotsObj[spotId]);
   const [isLoading, setIsLoading] = useState(true);
   const reviews = useSelector(state => {
     console.log('Full Redux State:', state);
