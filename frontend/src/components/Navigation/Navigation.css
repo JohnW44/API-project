@@ -4,15 +4,11 @@ body, html {
   width: 100%;
 }
 
-.hidden {
-  display: none;
-}
-
 .profileBtn {
   display: flex;
   right: 20px;
   flex-direction: row-reverse;
-  height: 50px;
+  height: auto;
   width: 300px;
   cursor: pointer;
 }
@@ -22,13 +18,13 @@ body, html {
 }
 
 .topnav {
-  background-color: black;
-  color: white;
+  background-color: #dce6e1;
+  color:rgb(209, 0, 52);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 19px;
-  height: 60px;
+  padding: 10px 20px;
+  height: 80px;
   width: 100%; 
   box-sizing: border-box; 
   position: fixed; 
@@ -51,13 +47,13 @@ body, html {
 }
 
 .logo {
-  height: 48px; 
+  height: 80px; 
   width: auto;
   margin-right: 8px;
 }
 
 .site-name {
-  color: white;
+  color:rgb(209, 0, 52);
   text-decoration: none;
   font-size: 1.2em;
   font-weight: bold;
@@ -70,16 +66,17 @@ body, html {
 }
 
 .topnav a {
-  color: white; 
+  color: #00b966; 
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
   font-size: 17px;
+  box-shadow: box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 .topnav a:hover {
   background-color: transparent; 
-  color: white; 
+  color: rgb(255, 6, 6); 
 }
 
 
@@ -92,12 +89,10 @@ main {
 }
 
 .create-spot-link {
-  color: white;
   border-radius: 10px;
-  background-color: #312f2f; 
-  transition: none; 
+  background-color: #ce5858; 
 }
 
 .create-spot-link:hover {
-  background-color: #ff385c; 
+  color: #7a2535; 
 }

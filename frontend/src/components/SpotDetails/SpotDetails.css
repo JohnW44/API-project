@@ -1,5 +1,5 @@
 body {
-  background-color: #5bc0f0;
+  background-color: #53DBA0;
 }
 
 
@@ -163,19 +163,12 @@ h1 {
   margin-top: 5px;
 }
 
-.post-review-button {
-  background-color: #ff2727;
-  color: rgb(255, 113, 113);
-  border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.2s;
+button.post-review-button {
+ background-color: #ff385c;
 }
 
 .post-review-button:hover {
-  background-color: #777777;
+  background-color: #fc0000;
 }
 
 .reviews-list {

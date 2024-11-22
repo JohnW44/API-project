@@ -26,7 +26,7 @@ function LandingPage() {
   return (
     <div className="landing-page">
       <section className="featured-listings">
-        <h2>Explore SpookySpots</h2>
+        <h2>Explore Holiday Havens!</h2>
         <div className="listings-grid">
           {spots.map((spot) => (
             <div 

@@ -1,3 +1,4 @@
+
 .landing-page {
   font-family: Arial, sans-serif;
   min-height: 100vh;
@@ -22,12 +23,13 @@ nav {
 
 .featured-listings {
   padding: 50px 0;
-  background-color: #f7f7f7;
+  background-color: #53DBA0;
 }
 
 .featured-listings h2 {
   text-align: center;
   margin-bottom: 20px;
+
 }
 
 .listings-grid {
@@ -45,6 +47,7 @@ nav {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
   position: relative;
+  background-color: #DB5361 ;
 }
 
 .listing-card:hover {
@@ -78,7 +81,7 @@ nav {
 }
 
 .listing-price {
-  color: #666;
+  color: #DB7F53;
 }
 
 .listing-rating {

@@ -3,7 +3,7 @@ import './Navigation.css';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import ProfileButton from './ProfileButton';
-import HauntedHouseLogo from '../../../../images/SpookySpots-logo2.png';
+import HauntedHouseLogo from '../../../../images/holiday havs.png';
 
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector(state => state.session.user);
@@ -15,7 +15,7 @@ function Navigation({ isLoaded }) {
         <Link to="/" className="logo-link">
           <img src={HauntedHouseLogo} alt="Haunted House Logo" className="logo" />
         </Link>
-        <NavLink to="/" className="site-name">SpookySpots</NavLink>
+        <NavLink to="/" className="site-name">Holiday Havens</NavLink>
       </div>
       {isLoaded && (
         <div className='right-section'>
