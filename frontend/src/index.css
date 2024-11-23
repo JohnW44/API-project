@@ -11,3 +11,20 @@ body, html {
   flex-direction: column;
   min-height: 100vh;
 }
+
+@font-face {
+  font-family: 'Holiday-Font';  /* This is the name you'll use to reference the font */
+  src: url('./fonts/Sentinel.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Define it as a CSS variable for consistent use */
+:root {
+  --heading-font: 'Holiday-Font', sans-serif;  /* Include a fallback font */
+}
+
+/* Apply to all headings globally */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--heading-font);
+}

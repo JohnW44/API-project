@@ -26,8 +26,8 @@ body, html {
   padding: 10px 20px;
   height: 80px;
   width: 100%; 
-  box-sizing: border-box; 
-  position: fixed; 
+  /* box-sizing: border-box;  */
+  /* position: fixed;  */
 }
 
 .left-section {
@@ -92,10 +92,10 @@ main {
   background-color: #53DBA0; 
   cursor: pointer;
   transition: background-color 0.3s, box-shadow .2s;
-  box-shadow: 0 1px 1px rgba(0, 0, 1, 1);
+  box-shadow: 0 1px 1px rgba(1, 1, 1, 1);
 }
 
 .create-spot-link:hover {
   background-color: #000000; 
-  box-shadow: 0 .5px .5px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 .5px .5px rgba(0, 0, 0, 0);
 }
