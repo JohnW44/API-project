@@ -22,6 +22,9 @@ function Navigation({ isLoaded }) {
           {sessionUser && (
             <NavLink to="/spots/new" className="create-spot-link">Create a New Spot</NavLink>
           )}
+          <NavLink to="/spots/manage" className="manage-spots-link">
+            Manage Spots
+          </NavLink>
           <ProfileButton user={sessionUser} navigate={navigate} />
         </div>
       )}    

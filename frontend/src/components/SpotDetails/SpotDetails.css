@@ -202,12 +202,18 @@ h1 {
   line-height: 1.5;
 }
 
-.delete-review-button {
+.review-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.review-actions button,
+.review-actions > div > button {
   background-color: #ff385c;
   color: white;
   border: 2.5px solid black;
   padding: 8px 16px;
-  margin-top: 10px;
   font-size: 14px;
   cursor: pointer;
   border-radius: 5px;
@@ -215,7 +221,31 @@ h1 {
   transition: background-color 0.3s, box-shadow .2s;
 }
 
-.delete-review-button:hover {
+.review-actions button:hover,
+.review-actions > div > button:hover {
+  background-color: #e31c5f;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.owner-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.owner-actions button {
+  background-color: #ff385c;
+  color: white;
+  border: 2.5px solid black;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 5px;
+  box-shadow: 0 4px 4px rgba(0, 0, 1, 1);
+  transition: background-color 0.3s, box-shadow .2s;
+}
+
+.owner-actions button:hover {
   background-color: #e31c5f;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }

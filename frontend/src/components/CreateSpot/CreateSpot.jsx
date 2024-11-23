@@ -1,35 +1,30 @@
 import './CreateSpot.css';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { useModal } from '../../context/Modal';
-import { addSpot } from '../../store/spots';
+import { useNavigate, useParams } from 'react-router-dom';
+import { addSpot, updateSpot } from '../../store/spots';
 import { useDispatch } from 'react-redux';
 import { csrfFetch } from '../../store/csrf';
 
-
 function CreateSpot() {
+  const { spotId } = useParams();
   const navigate = useNavigate();
-  const sessionUser = useSelector(state => state.session.user);
-  const { closeModal } = useModal();
   const dispatch = useDispatch();
-  const [address, setAddress] = useState('');
-  const [city, setCity] = useState('');
-  const [state, setState] = useState('');
-  const [country, setCountry] = useState('');
-  const [lat, setLat] = useState(0);
-  const [lng, setLng] = useState(0);
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [price, setPrice] = useState('');
-  const [previewImage, setPreviewImage] = useState('');
-  const [image1, setImage1] = useState('');
-  const [image2, setImage2] = useState('');
-  const [image3, setImage3] = useState('');
-  const [image4, setImage4] = useState('');
+  const existingSpot = useSelector(state => state.spots.spotsObj[spotId]);
+  
+  const [address, setAddress] = useState(existingSpot?.address || '');
+  const [city, setCity] = useState(existingSpot?.city || '');
+  const [state, setState] = useState(existingSpot?.state || '');
+  const [country, setCountry] = useState(existingSpot?.country || '');
+  const [lat, setLat] = useState(existingSpot?.lat || 0);
+  const [lng, setLng] = useState(existingSpot?.lng || 0);
+  const [name, setName] = useState(existingSpot?.name || '');
+  const [description, setDescription] = useState(existingSpot?.description || '');
+  const [price, setPrice] = useState(existingSpot?.price || '');
+  const [previewImage, setPreviewImage] = useState(existingSpot?.previewImage || '');
   const [errors, setErrors] = useState({});
 
-
+  const title = spotId ? "Update your Holiday Haven" : "Create a new Holiday Haven";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -70,41 +65,47 @@ function CreateSpot() {
       return;
     }
 
-    const newSpot = {
-      ownerId: sessionUser?.id,
-      name,
-      description,
-      price: parseFloat(price),
+    const spotData = {
       address,
       city,
       state,
       country,
       lat: parseFloat(lat),
       lng: parseFloat(lng),
+      name,
+      description,
+      price: parseFloat(price),
       previewImage
     };
 
-    console.log('New spot data:', newSpot);
-
     try {
-      const response = await csrfFetch('/api/spots', {
-        method: 'POST',
-        body: JSON.stringify(newSpot),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
+      let response;
+      if (spotId) {
+        response = await csrfFetch(`/api/spots/${spotId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(spotData)
+        });
+      } else {
+        response = await csrfFetch('/api/spots', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(spotData)
+        });
+      }
 
       if (response.ok) {
-        const createdSpot = await response.json();
-        console.log('Created spot:', createdSpot);
-        dispatch(addSpot(createdSpot));
-        closeModal();
-        navigate('/');
-      } else {
-        const errorData = await response.json();
-        console.error('Error response:', errorData);
-        setErrors(errorData.errors || { general: "An error occurred while creating the spot." });
+        const spot = await response.json();
+        if (spotId) {
+          dispatch(updateSpot(spot));
+        } else {
+          dispatch(addSpot(spot));
+        }
+        navigate(`/spots/${spot.id}`);
       }
     } catch (error) {
       console.error('Failed to create spot:', error);
@@ -120,7 +121,7 @@ function CreateSpot() {
 
   return (
     <div className="create-spot">
-      <h1>Create a new Holiday Haven</h1>
+      <h1>{title}</h1>
       <form onSubmit={handleSubmit}>
         <section>
           <h2>Where&apos;s your place located?</h2>
@@ -220,14 +221,10 @@ function CreateSpot() {
             placeholder="Preview Image URL" 
           />
           {errors.previewImage && <p style={{color: 'red'}}>{errors.previewImage}</p>}
-          <input type="url" value={image1} onChange={(e) => setImage1(e.target.value)} placeholder="Image URL" />
-          <input type="url" value={image2} onChange={(e) => setImage2(e.target.value)} placeholder="Image URL" />
-          <input type="url" value={image3} onChange={(e) => setImage3(e.target.value)} placeholder="Image URL" />
-          <input type="url" value={image4} onChange={(e) => setImage4(e.target.value)} placeholder="Image URL" />
         </section>
         <hr className="section-divider" />
 
-        <button type="submit">Create Spot</button>
+        <button type="submit">{spotId ? 'Update Spot' : 'Create Spot'}</button>
       </form>
     </div>
   );

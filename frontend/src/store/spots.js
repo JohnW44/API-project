@@ -1,7 +1,10 @@
+import { csrfFetch } from './csrf';
+
 const LOAD_SPOTS = 'spots/LOAD_SPOTS';
 const LOAD_SPOT_DETAILS = 'spots/LOAD_SPOT_DETAILS';
 const ADD_SPOT = 'spots/ADD_SPOT';
 const DELETE_SPOT = 'spots/DELETE_SPOT'
+const UPDATE_SPOT = 'spots/UPDATE_SPOT';
 
 // Action Creators
 const loadSpots = (spotsData) => ({
@@ -21,6 +24,11 @@ export const addSpot = (spot) => ({
 
 export const deleteSpot = (spot) => ({
   type: DELETE_SPOT,
+  spot
+})
+
+export const updateSpot = (spot) => ({
+  type: UPDATE_SPOT,
   spot
 })
 
@@ -44,14 +52,17 @@ export const fetchSpotDetails = (spotId) => async (dispatch) => {
 };
 
 export const fetchDeleteSpot = (spotId) => async (dispatch) => {
-  const response = await fetch(`/api/spots/${spotId}`, {
-    method: 'DELETE'
-  })
+  const response = await csrfFetch(`/api/spots/${spotId}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+  
   if (response.ok) {
-    dispatch(deleteSpot({ id: spotId }))
+    dispatch(deleteSpot({ id: spotId }));
   }
-}   
-
+};
 
 //Reducers
 const initialState = { 
