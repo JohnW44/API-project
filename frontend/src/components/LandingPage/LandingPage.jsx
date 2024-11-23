@@ -1,32 +1,35 @@
-// import HauntedHouseLogo from '../../../../images/Gcds-Halloween-Haunted-house.ico';     
 import './LandingPage.css';
-import { useEffect } from 'react';
+import { useEffect, useMemo, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSpots } from '../../store/spots';
 import { useNavigate } from 'react-router-dom';
-// import backgroundImage from '../../../../images/HomePageBackground.png';
 
 function LandingPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const spots = useSelector(state => Object.values(state.spots.spotsObj));
+  
+  // Get spots object from Redux store
+  const spotsObj = useSelector(state => state.spots.spotsObj);
+  
+  // Memoize the conversion from object to array
+  const spots = useMemo(() => 
+    Object.values(spotsObj),
+    [spotsObj]
+  );
+
+  // Memoize the handler
+  const handleSpotClick = useCallback((spotId) => {
+    navigate(`/spots/${spotId}`);
+  }, [navigate]);
 
   useEffect(() => {
-    const loadSpots = async () => {
-      await dispatch(fetchSpots());
-    };
-    
-    loadSpots();
+    dispatch(fetchSpots());
   }, [dispatch]);
-
-  const handleSpotClick = (spotId) => {
-    navigate(`/spots/${spotId}`);
-  };
 
   return (
     <div className="landing-page">
       <section className="featured-listings">
-        <h2>Explore Holiday Havens!</h2>
+        <h2>Explore SpookySpots</h2>
         <div className="listings-grid">
           {spots.map((spot) => (
             <div 
