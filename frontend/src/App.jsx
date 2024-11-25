@@ -44,20 +44,20 @@ const router = createBrowserRouter([
         element: <SignupFormPage />
       },
       {
-        path: '/spots/:spotId',
-        element: <SpotDetails />
-      },
-      {
-        path: '/spots/:spotId/edit',
-        element: <CreateSpot />
-      },
-      {
         path: '/spots/new',
         element: <CreateSpot />
       },
       {
         path: '/spots/manage',
         element: <ManageSpots />
+      },
+      {
+        path: '/spots/:spotId/edit',
+        element: <CreateSpot />
+      },
+      {
+        path: '/spots/:spotId',
+        element: <SpotDetails />
       }
     ]
   }

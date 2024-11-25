@@ -10,10 +10,11 @@ function LandingPage() {
   
   const spotsObj = useSelector(state => state.spots.spotsObj);
   
-  const spots = useMemo(() => 
-    Object.values(spotsObj),
-    [spotsObj]
-  );
+  const spots = useMemo(() => {
+    const spotsArray = Object.values(spotsObj);
+    console.log("Spots data:", spotsArray);
+    return spotsArray;
+  }, [spotsObj]);
 
   const handleSpotClick = useCallback((spotId) => {
     navigate(`/spots/${spotId}`);
@@ -52,9 +53,16 @@ function LandingPage() {
             >
               <div className="listing-image">
                 {spot.previewImage ? (
-                  <img src={spot.previewImage} alt={spot.name} />
+                  <img 
+                    src={spot.previewImage} 
+                    alt={spot.name}
+                    onError={(e) => {
+                      console.error("Failed to load image:", spot.previewImage);
+                      e.target.src = 'https://via.placeholder.com/300x200?text=No+Image';
+                    }}
+                  />
                 ) : (
-                  <div className="placeholder-image"></div>
+                  <div className="placeholder-image">No Image Available</div>
                 )}
                 <div className="listing-name-overlay">{spot.name}</div>
               </div>

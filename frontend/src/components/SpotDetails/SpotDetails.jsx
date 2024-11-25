@@ -147,7 +147,9 @@ export function SpotDetails() {
                 <h3>{review.User?.firstName || 'Anonymous'}</h3>
                 <p className="review-date">{formatDate(review.createdAt)}</p>
                 <p className="review-text">{review.review || 'No review text'}</p>
-                {currentUser && review.userId === currentUser.id && (
+                {currentUser && 
+                 review.userId === currentUser.id && 
+                 !isOwner && (
                   <div className="review-actions">
                     <OpenModalButton
                       buttonText="Edit Review"

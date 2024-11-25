@@ -1,15 +1,14 @@
 import './CreateSpot.css';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { addSpot, updateSpot } from '../../store/spots';
-import { useDispatch } from 'react-redux';
-import { csrfFetch } from '../../store/csrf';
+import { createSpot, updateExistingSpot } from '../../store/spots';
 
 function CreateSpot() {
   const { spotId } = useParams();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  
   const existingSpot = useSelector(state => state.spots.spotsObj[spotId]);
   
   const [address, setAddress] = useState(existingSpot?.address || '');
@@ -34,89 +33,71 @@ function CreateSpot() {
     if (!city) newErrors.city = "City is required";
     if (!state) newErrors.state = "State is required";
     if (!description) {
-      newErrors.description = "Description is required";}
-      else if(description.length < 30){
-        newErrors.description = "Description needs 30 or more characters"
-      }
+      newErrors.description = "Description is required";
+    } else if (description.length < 30) {
+      newErrors.description = "Description needs 30 or more characters";
+    }
     if (!name) newErrors.name = "Name is required";
     if (!price) newErrors.price = "Price is required";
-    if (!previewImage) {
+    
+   
+    if (!spotId && !previewImage) {
       newErrors.previewImage = "Preview image is required";
-    } else {
-      const validExtensions = ['.png', '.jpg', '.jpeg'];
-      const extension = previewImage.slice(previewImage.lastIndexOf('.')).toLowerCase();
-      if (!validExtensions.includes(extension)) {
-        newErrors.previewImage = "Image URL must end in .png, .jpg, or .jpeg";
+    } else if (previewImage) {
+      try {
+        new URL(previewImage);
+        const validExtensions = ['.png', '.jpg', '.jpeg'];
+        const hasValidExtension = validExtensions.some(ext => 
+          previewImage.toLowerCase().endsWith(ext)
+        );
+        if (!hasValidExtension) {
+          newErrors.previewImage = "Image URL must end in .png, .jpg, or .jpeg";
+        }
+      } catch (e) {
+        newErrors.previewImage = "Please enter a valid image URL";
       }
     }
 
-    if (isNaN(lat) || lat < -90 || lat > 90) {
+    const latNum = parseFloat(lat);
+    const lngNum = parseFloat(lng);
+
+    if (isNaN(latNum) || latNum < -90 || latNum > 90) {
       newErrors.lat = "Latitude must be a number between -90 and 90";
     }
-
-    
-     if (isNaN(lng) || lng < -180 || lng > 180) {
+    if (isNaN(lngNum) || lngNum < -180 || lngNum > 180) {
       newErrors.lng = "Longitude must be a number between -180 and 180";
     }
 
     setErrors(newErrors);
-
-    if (Object.keys(newErrors).length > 0) {
-      return;
-    }
+    if (Object.keys(newErrors).length > 0) return;
 
     const spotData = {
       address,
       city,
       state,
       country,
-      lat: parseFloat(lat),
-      lng: parseFloat(lng),
+      lat: latNum,
+      lng: lngNum,
       name,
       description,
       price: parseFloat(price),
-      previewImage
+      ...(previewImage && { previewImage })
     };
 
-    try {
-      let response;
-      if (spotId) {
-        response = await csrfFetch(`/api/spots/${spotId}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(spotData)
-        });
-      } else {
-        response = await csrfFetch('/api/spots', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(spotData)
-        });
-      }
-
-      if (response.ok) {
-        const spot = await response.json();
-        if (spotId) {
-          dispatch(updateSpot(spot));
-        } else {
-          dispatch(addSpot(spot));
-        }
-        navigate(`/spots/${spot.id}`);
-      }
-    } catch (error) {
-      console.error('Failed to create spot:', error);
-      if (error instanceof Response) {
-        const errorData = await error.json();
-        console.error('Error details:', errorData);
-        setErrors(errorData.errors || { general: "An error occurred while creating the spot." });
-      } else {
-        setErrors({ general: "An unexpected error occurred." });
-      }
+    let response;
+    if (spotId) {
+      response = await dispatch(updateExistingSpot(spotId, spotData));
+    } else {
+      response = await dispatch(createSpot(spotData));
     }
+
+    if (response.id) {
+      navigate(`/spots/${response.id}`);
+    } else if (response.errors) {
+      setErrors(response.errors);
+    }
+
+    // navigate(`/spots/${spot.id}`);
   };
 
   return (
@@ -160,19 +141,23 @@ function CreateSpot() {
               <label htmlFor="lat">Latitude:</label>
               <input
                 id="lat"
-                name="text"
+                type="number"
+                step="any"
                 value={lat}
                 onChange={(e) => setLat(e.target.value)}
               />
+              {errors.lat && <p className="error">{errors.lat}</p>}
             </div>
             <div>
               <label htmlFor="lng">Longitude:</label>
               <input
                 id="lng"
-                name="text"
+                type="number"
+                step="any"
                 value={lng}
                 onChange={(e) => setLng(e.target.value)}
               />
+              {errors.lng && <p className="error">{errors.lng}</p>}
             </div>
           </div>
         </section>
@@ -220,7 +205,23 @@ function CreateSpot() {
             onChange={(e) => setPreviewImage(e.target.value)} 
             placeholder="Preview Image URL" 
           />
-          {errors.previewImage && <p style={{color: 'red'}}>{errors.previewImage}</p>}
+          {previewImage && (
+            <div className="image-preview">
+              <img 
+                src={previewImage} 
+                alt="Preview" 
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = 'path/to/fallback/image.png';
+                  setErrors(prev => ({
+                    ...prev,
+                    previewImage: "Failed to load image. Please check the URL"
+                  }));
+                }}
+              />
+            </div>
+          )}
+          {errors.previewImage && <p className="error">{errors.previewImage}</p>}
         </section>
         <hr className="section-divider" />
 

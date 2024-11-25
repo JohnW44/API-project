@@ -44,47 +44,53 @@ function ManageSpots() {
     return null;
   }
 
-  const SpotCard = ({ spot }) => (
-    <div 
-      key={spot.id} 
-      className="listing-card"
-      onClick={() => handleSpotClick(spot.id)}
-    >
-      <div className="listing-image">
-        {spot.previewImage ? (
-          <img src={spot.previewImage} alt={spot.name} />
-        ) : (
-          <div className="placeholder-image"></div>
-        )}
-        <div className="listing-name-overlay">{spot.name}</div>
+  const SpotCard = ({ spot }) => {
+    const isSpotOwner = spot.ownerId === currentUser?.id;
+
+    return (
+      <div 
+        key={spot.id} 
+        className="listing-card"
+        onClick={() => handleSpotClick(spot.id)}
+      >
+        <div className="listing-image">
+          {spot.previewImage ? (
+            <img src={spot.previewImage} alt={spot.name} />
+          ) : (
+            <div className="placeholder-image"></div>
+          )}
+          <div className="listing-name-overlay">{spot.name}</div>
+        </div>
+        <div className="listing-info">
+          <div className="listing-location">
+            {spot.city}, {spot.state}
+          </div>
+          <div className="listing-price">
+            ${spot.price} / night
+          </div>
+          <div className="listing-rating">
+            ★ {spot.avgRating || 'New'}
+          </div>
+          {!isSpotOwner && (
+            <div className="spot-actions">
+              <button 
+                onClick={(e) => handleUpdate(e, spot.id)}
+                className="update-button"
+              >
+                Update
+              </button>
+              <button 
+                onClick={(e) => handleDelete(e, spot.id)}
+                className="delete-button"
+              >
+                Delete
+              </button>
+            </div>
+          )}
+        </div>
       </div>
-      <div className="listing-info">
-        <div className="listing-location">
-          {spot.city}, {spot.state}
-        </div>
-        <div className="listing-price">
-          ${spot.price} / night
-        </div>
-        <div className="listing-rating">
-          ★ {spot.avgRating || 'New'}
-        </div>
-        <div className="spot-actions">
-          <button 
-            onClick={(e) => handleUpdate(e, spot.id)}
-            className="update-button"
-          >
-            Update
-          </button>
-          <button 
-            onClick={(e) => handleDelete(e, spot.id)}
-            className="delete-button"
-          >
-            Delete
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="manage-spots">
