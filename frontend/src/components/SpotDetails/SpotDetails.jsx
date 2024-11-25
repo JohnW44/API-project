@@ -128,7 +128,7 @@ export function SpotDetails() {
         <hr className="reviews-divider" />
         <div className="reviews-header">
           <div className="reviews-summary">
-            <h2>★ {formatRating(spot.avgStarRating)} · {spot.numReviews} reviews</h2>
+            <h2 className='review-stars'>★ {formatRating(spot.avgStarRating)} · {spot.numReviews} reviews</h2>
           </div>
           {canReview && (
             <div className="review-button-container">

@@ -1,5 +1,6 @@
 body {
-  background-color: #53DBA0;
+  background-color: #391f97;
+  color: white
 }
 
 
@@ -16,7 +17,7 @@ h1 {
 
 .spot-location {
   font-size: 15px;
-  color: #000000;
+  color: #fffdfd;
   margin-bottom: 20px;
 }
 
@@ -73,6 +74,7 @@ h1 {
 .spot-info h2 {
   font-size: 20px;
   margin-bottom: 15px;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
 }
 
 .spot-info p {
@@ -108,7 +110,7 @@ h1 {
 .rating-reviews {
   display: flex;
   align-items: center;
-  font-size: 14px;      
+  font-size: 14px;     
 }
 
 .rating {
@@ -141,6 +143,9 @@ h1 {
   margin-top: 40px;
 }
 
+.review-stars {
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+}
 .reviews-divider {
   border: none;
   border-top: 2px solid #070707;
@@ -192,7 +197,7 @@ h1 {
 }
 
 .review-date {
-  color: #000000;
+  color: #ffffff;
   font-size: 15px;
   font-weight: bold;
   margin-bottom: 5px;

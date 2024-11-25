@@ -8,16 +8,13 @@ function LandingPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
-  // Get spots object from Redux store
   const spotsObj = useSelector(state => state.spots.spotsObj);
   
-  // Memoize the conversion from object to array
   const spots = useMemo(() => 
     Object.values(spotsObj),
     [spotsObj]
   );
 
-  // Memoize the handler
   const handleSpotClick = useCallback((spotId) => {
     navigate(`/spots/${spotId}`);
   }, [navigate]);
@@ -26,8 +23,24 @@ function LandingPage() {
     dispatch(fetchSpots());
   }, [dispatch]);
 
+  const getRandomColor = () => {
+    const colors = [
+      '#ff0000', // red
+      '#00ff00', // green
+      '#ffff00', // yellow
+      '#ff00ff', // pink  
+      '#00ffff'  // turquoise
+    ];
+    return colors[Math.floor(Math.random() * colors.length)];
+  };
+
+  const handleMouseEnter = (e) => {
+    e.currentTarget.style.setProperty('--random-color', getRandomColor());
+  };
+
   return (
     <div className="landing-page">
+      <h1 className="landing-title">Holiday Havens</h1>
       <section className="featured-listings">
         <h2>Explore Holiday Havens</h2>
         <div className="listings-grid">
@@ -36,6 +49,7 @@ function LandingPage() {
               key={spot.id} 
               className="listing-card"
               onClick={() => handleSpotClick(spot.id)}
+              onMouseEnter={handleMouseEnter}
             >
               <div className="listing-image">
                 {spot.previewImage ? (
