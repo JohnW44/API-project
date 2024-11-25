@@ -5,9 +5,14 @@
 }
 
 .create-spot h1 {
-  font-size: 24px;
+  font-size: 30px;
   margin-bottom: 20px;
+ color: rgb(255, 0, 0);
+ font-weight: 100;
+ display: flex;
+ justify-content: center;
 }
+
 
 .create-spot h2 {
   font-size: 20px;

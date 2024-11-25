@@ -8,7 +8,7 @@
 
 header {
   padding: 20px;
-  background-color: #fff;
+  background-color: red;
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -20,7 +20,15 @@ nav {
   margin: 0 auto;
 }
 
-h2 {
+.featured-listings h1 {
+  color:red;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  font-size: 45px;
+}
+
+.featured-listings h2 {
   font-weight: 200;
   color: red
 }
@@ -51,7 +59,7 @@ h2 {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
   position: relative;
-  background-color: rgb(235, 62, 62);
+  background-color: rgb(209, 0, 52);
 }
 
 .listing-card:hover {
@@ -129,9 +137,10 @@ h2 {
 
 .landing-title {
   display: flex;
-  justify-content: center;;
-  font-size: 3rem;
+  justify-content: center;
+  font-size: 2.5rem;
+  font-weight: bold;
   color: #ff0000;
-  margin: 10px 0;
+  margin: 20px 0;
   text-align: center;
 }

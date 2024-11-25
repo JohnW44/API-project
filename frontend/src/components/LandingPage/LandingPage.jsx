@@ -40,9 +40,8 @@ function LandingPage() {
 
   return (
     <div className="landing-page">
-      <h1 className="landing-title">Holiday Havens</h1>
       <section className="featured-listings">
-        <h2>Explore Holiday Havens</h2>
+        <h1>Explore Holiday Havens</h1>
         <div className="listings-grid">
           {spots.map((spot) => (
             <div 

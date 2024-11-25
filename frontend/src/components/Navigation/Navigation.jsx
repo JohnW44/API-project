@@ -22,21 +22,49 @@ function Navigation({ isLoaded }) {
     return Object.values(spotsObj).some(spot => spot.ownerId === sessionUser.id);
   }, [spotsObj, sessionUser]);
 
+
+  const getRandomColor = () => {
+    const colors = [
+      '#ff0000', // red
+      '#00ff00', // green
+      '#ffff00', // yellow
+      '#ff00ff', // pink  
+      '#00ffff'  // turquoise
+    ];
+    return colors[Math.floor(Math.random() * colors.length)];
+  };
+
+  const handleMouseEnter = (e) => {
+    e.currentTarget.style.setProperty('--random-color', getRandomColor());
+  };
+
   return (
     <nav className='topnav'>
       <div className='left-section'>
-        <Link to="/" className="logo-link">
+        <Link to="/" className="logo-link" onMouseEnter={handleMouseEnter}>
           <img src={HauntedHouseLogo} alt="Haunted House Logo" className="logo" />
         </Link>
-        <NavLink to="/" className="site-name">Holiday Havens</NavLink>
+        <NavLink to="/" className="site-name" onMouseEnter={handleMouseEnter}>
+          Holiday Havens
+        </NavLink>
       </div>
       {isLoaded && (
         <div className='right-section'>
           {sessionUser && (
-            <NavLink to="/spots/new" className="create-spot-link">Create a New Spot</NavLink>
+            <NavLink 
+              to="/spots/new" 
+              className="nav-button"
+              onMouseEnter={handleMouseEnter}
+            >
+              Create a New Spot
+            </NavLink>
           )}
           {sessionUser && userHasSpots && (
-            <NavLink to="/spots/manage" className="manage-spots-link">
+            <NavLink 
+              to="/spots/manage" 
+              className="nav-button"
+              onMouseEnter={handleMouseEnter}
+            >
               Manage Spots
             </NavLink>
           )}

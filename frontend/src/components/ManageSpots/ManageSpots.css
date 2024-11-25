@@ -15,8 +15,10 @@
 
 .manage-header h1 {
   font-size: 31px;
-  margin: 0;
-  color: #000000;
+  color: #ff385c;
+  font-weight: 100;
+  display: flex;
+  justify-content: center;
 }
 
 .create-new-spot-button {
@@ -59,3 +61,21 @@
   background-color: #e31c5f;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 } 
+
+a.manage-spots-link {
+  background-color: #ff385c;
+  color: white;
+  border: 2.5px solid black;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  box-shadow: 0 4px 4px rgba(0, 0, 1, 1);
+  transition: background-color 0.3s, box-shadow 0.2s;
+}
+
+a.manage-spots-link:hover {
+  background-color: #e31c5f;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  color:white;
+}
