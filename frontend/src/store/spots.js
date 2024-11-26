@@ -41,9 +41,7 @@ const setLoading = (isLoading) => ({
 //Thunk Actions
 export const fetchSpots = () => async (dispatch, getState) => {
   const state = getState();
-  if (state.spots.isLoading || Object.keys(state.spots.spotsObj).length > 0) {
-    return;
-  }
+  if (state.spots.isLoading) return;
 
   dispatch(setLoading(true));
   const response = await csrfFetch('/api/spots');

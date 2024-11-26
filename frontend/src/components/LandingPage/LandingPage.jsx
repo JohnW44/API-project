@@ -1,10 +1,12 @@
 import './LandingPage.css';
-import { useMemo, useCallback } from 'react';
-import { useSelector } from 'react-redux';
+import { useMemo, useCallback, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { fetchSpots } from '../../store/spots';
 
 function LandingPage() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   
   const spotsObj = useSelector(state => state.spots.spotsObj);
   // const isLoading = useSelector(state => state.spots.isLoading);
@@ -28,6 +30,14 @@ function LandingPage() {
 
   const handleMouseEnter = (e) => {
     e.currentTarget.style.setProperty('--random-color', getRandomColor());
+  };
+
+  useEffect(() => {
+    dispatch(fetchSpots());
+  }, [dispatch]);
+
+  const formatRating = (rating) => {
+    return rating ? Number(rating).toFixed(1) : '.';
   };
 
   return (
@@ -65,7 +75,7 @@ function LandingPage() {
                   ${spot.price} / night
                 </div>
                 <div className="listing-rating">
-                  ★ {spot.avgRating || 'New'}
+                  ★ {formatRating(spot.avgRating)}
                 </div>
               </div>
             </div>
