@@ -5,6 +5,7 @@ const LOAD_SPOT_DETAILS = 'spots/LOAD_SPOT_DETAILS';
 const ADD_SPOT = 'spots/ADD_SPOT';
 const DELETE_SPOT = 'spots/DELETE_SPOT'
 const UPDATE_SPOT = 'spots/UPDATE_SPOT';
+const SET_LOADING = 'spots/SET_LOADING';
 
 // Action Creators
 const loadSpots = (spotsData) => ({
@@ -32,17 +33,37 @@ export const updateSpot = (spot) => ({
   spot
 })
 
+const setLoading = (isLoading) => ({
+  type: SET_LOADING,
+  isLoading
+});
+
 //Thunk Actions
-export const fetchSpots = () => async (dispatch) => {
+export const fetchSpots = () => async (dispatch, getState) => {
+  const state = getState();
+  if (state.spots.isLoading || Object.keys(state.spots.spotsObj).length > 0) {
+    return;
+  }
+
+  dispatch(setLoading(true));
   const response = await csrfFetch('/api/spots');
   
   if (response.ok) {
     const spotsData = await response.json();
     dispatch(loadSpots(spotsData));
   }
+  
+  dispatch(setLoading(false));
 };
 
-export const fetchSpotDetails = (spotId) => async (dispatch) => {
+export const fetchSpotDetails = (spotId) => async (dispatch, getState) => {
+  const state = getState();
+  const existingSpot = state.spots.spotsObj[spotId];
+  
+  if (existingSpot && existingSpot.Owner) {
+    return;
+  }
+
   const response = await csrfFetch(`/api/spots/${spotId}`);
   
   if (response.ok) {
@@ -144,7 +165,8 @@ const initialState = {
     spotsObj: {},
     currentSpot: null, 
     page: 1, 
-    size: 20 
+    size: 20,
+    isLoading: false
 };
 
 const spotsReducer = (state = initialState, action) => {
@@ -193,6 +215,8 @@ const spotsReducer = (state = initialState, action) => {
                     }
                 }
             };
+        case SET_LOADING:
+            return { ...state, isLoading: action.isLoading };
         default:
             return state;
     }

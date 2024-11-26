@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { useEffect, useState, useMemo, useCallback } from 'react';
+import { useEffect, useState, useMemo, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchSpotDetails, fetchDeleteSpot } from '../../store/spots';
@@ -18,6 +18,8 @@ export function SpotDetails() {
   const currentUser = useSelector(state => state.session.user);
   const [isLoading, setIsLoading] = useState(true);
   
+  const dataFetchedRef = useRef(false);
+
   const reviewsArray = useMemo(() => {
     return Object.values(reviewsState.reviewsObj);
   }, [reviewsState.reviewsObj]);
@@ -65,13 +67,18 @@ export function SpotDetails() {
   }), []);
 
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      await dispatch(fetchSpotDetails(spotId));
-      await dispatch(fetchSpotReviews(spotId));
-      setIsLoading(false);
-    };
-    fetchData();
+    if (!dataFetchedRef.current) {
+      const fetchData = async () => {
+        setIsLoading(true);
+        await Promise.all([
+          dispatch(fetchSpotDetails(spotId)),
+          dispatch(fetchSpotReviews(spotId))
+        ]);
+        setIsLoading(false);
+        dataFetchedRef.current = true;
+      };
+      fetchData();
+    }
   }, [dispatch, spotId]);
 
   const handleDelete = async () => {

@@ -25,19 +25,17 @@ const updateReviewAction = (review) => ({
   review
 });
 
-export const fetchSpotReviews = (spotId) => async (dispatch) => {
-  try {
-    const response = await fetch(`/api/spots/${spotId}/reviews`);
-    
-    if (response.ok) {
-      const data = await response.json();
-      console.log('Fetched reviews:', data);
-      dispatch(loadSpotReviews(data.Reviews || []));
-    } else {
-      console.error('Failed to fetch reviews');
-    }
-  } catch (error) {
-    console.error('Error fetching reviews:', error);
+export const fetchSpotReviews = (spotId) => async (dispatch, getState) => {
+  const state = getState();
+  if (state.reviews.state.currentSpotReviews.length > 0) {
+    return;
+  }
+
+  const response = await fetch(`/api/spots/${spotId}/reviews`);
+  
+  if (response.ok) {
+    const data = await response.json();
+    dispatch(loadSpotReviews(data.Reviews || []));
   }
 };
 

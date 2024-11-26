@@ -1,28 +1,19 @@
 import './LandingPage.css';
-import { useEffect, useMemo, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchSpots } from '../../store/spots';
+import { useMemo, useCallback } from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 function LandingPage() {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   
   const spotsObj = useSelector(state => state.spots.spotsObj);
+  // const isLoading = useSelector(state => state.spots.isLoading);
   
-  const spots = useMemo(() => {
-    const spotsArray = Object.values(spotsObj);
-    console.log("Spots data:", spotsArray);
-    return spotsArray;
-  }, [spotsObj]);
+  const spots = useMemo(() => Object.values(spotsObj), [spotsObj]);
 
   const handleSpotClick = useCallback((spotId) => {
     navigate(`/spots/${spotId}`);
   }, [navigate]);
-
-  useEffect(() => {
-    dispatch(fetchSpots());
-  }, [dispatch]);
 
   const getRandomColor = () => {
     const colors = [

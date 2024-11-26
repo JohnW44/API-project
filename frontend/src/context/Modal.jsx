@@ -9,45 +9,96 @@ const ModalContext = createContext();
 export function ModalProvider({ children }) {
     const modalRef = useRef();
     const [modalContent, setModalContent] = useState(null);
-    // callback function that will be called when modal is closing
     const [onModalClose, setOnModalClose] = useState(null);
+    const [formData, setFormData] = useState({
+        country: '',
+        address: '',
+        city: '',
+        state: '',
+        lat: 0,
+        lng: 0,
+        name: '',
+        description: '',
+        price: '',
+        previewImage: ''
+    });
+    const [formErrors, setFormErrors] = useState({});
 
     const closeModal = () => {
-        setModalContent(null); // clear the modal contents
-        // If callback function is truthy, call the callback function and reset it
-        // to null:
+        setModalContent(null);
         if (typeof onModalClose === "function") {
             setOnModalClose(null);
             onModalClose();
         }
     };
 
-    const contextValue = {
-      modalRef, // reference to modal div
-      modalContent, // React component to render inside modal
-      setModalContent, // function to set the React component to render inside modal
-      setOnModalClose, // function to set the callback function to be called when modal is closing
-      closeModal // function to close the modal
+    const updateFormField = (name, value) => {
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+        if (formErrors[name]) {
+            setFormErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors[name];
+                return newErrors;
+            });
+        }
     };
-  
 
-  return (
-    <>
-      <ModalContext.Provider value={contextValue}>
-        {children}
-      </ModalContext.Provider>
-      <div ref={modalRef} />
-    </>
-  );
+    const resetForm = (initialData = {}) => {
+        setFormData(initialData);
+        setFormErrors({});
+    };
+
+    const validateSpotForm = () => {
+        const errors = {};
+        const { country, address, city, state, description, name, price } = formData;
+
+        if (!country) errors.country = "Country is required";
+        if (!address) errors.address = "Address is required";
+        if (!city) errors.city = "City is required";
+        if (!state) errors.state = "State is required";
+        if (!description) {
+            errors.description = "Description is required";
+        } else if (description.length < 30) {
+            errors.description = "Description needs 30 or more characters";
+        }
+        if (!name) errors.name = "Name is required";
+        if (!price) errors.price = "Price is required";
+
+        setFormErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
+
+    const contextValue = {
+        modalRef,
+        modalContent,
+        setModalContent,
+        setOnModalClose,
+        closeModal,
+        formData,
+        formErrors,
+        updateFormField,
+        resetForm,
+        validateSpotForm,
+        setFormErrors
+    };
+
+    return (
+        <>
+            <ModalContext.Provider value={contextValue}>
+                {children}
+            </ModalContext.Provider>
+            <div ref={modalRef} />
+        </>
+    );
 }
 
 export function Modal() {
     const { modalRef, modalContent, closeModal } = useContext(ModalContext);
-    // If there is no div referenced by the modalRef or modalContent is not a
-    // truthy value, render nothing:
     if (!modalRef || !modalRef.current || !modalContent) return null;
   
-    // Render the following component to the div referenced by the modalRef
     return ReactDOM.createPortal(
       <div id="modal">
         <div id="modal-background" onClick={closeModal} />
