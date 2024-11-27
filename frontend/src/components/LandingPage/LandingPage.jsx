@@ -9,7 +9,6 @@ function LandingPage() {
   const dispatch = useDispatch();
   
   const spotsObj = useSelector(state => state.spots.spotsObj);
-  // const isLoading = useSelector(state => state.spots.isLoading);
   
   const spots = useMemo(() => Object.values(spotsObj), [spotsObj]);
 

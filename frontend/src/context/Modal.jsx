@@ -1,27 +1,33 @@
 // frontend/src/context/Modal.jsx
 
-import { useRef, createContext, useState, useContext } from 'react';
+import { useRef, createContext, useState, useContext, useCallback } from 'react';
 import ReactDOM from 'react-dom';
 import './Modal.css'
 
 const ModalContext = createContext();
 
+const initialFormState = {
+  country: '',
+  address: '',
+  city: '',
+  state: '',
+  lat: '',
+  lng: '',
+  name: '',
+  description: '',
+  price: '',
+  previewImage: '',
+  image1: '',
+  image2: '',
+  image3: '',
+  image4: ''
+};
+
 export function ModalProvider({ children }) {
     const modalRef = useRef();
     const [modalContent, setModalContent] = useState(null);
     const [onModalClose, setOnModalClose] = useState(null);
-    const [formData, setFormData] = useState({
-        country: '',
-        address: '',
-        city: '',
-        state: '',
-        lat: 0,
-        lng: 0,
-        name: '',
-        description: '',
-        price: '',
-        previewImage: ''
-    });
+    const [formData, setFormData] = useState(initialFormState);
     const [formErrors, setFormErrors] = useState({});
 
     const closeModal = () => {
@@ -46,10 +52,10 @@ export function ModalProvider({ children }) {
         }
     };
 
-    const resetForm = (initialData = {}) => {
-        setFormData(initialData);
+    const resetForm = useCallback((data = initialFormState) => {
+        setFormData(data);
         setFormErrors({});
-    };
+    }, []);
 
     const validateSpotForm = () => {
         const errors = {};

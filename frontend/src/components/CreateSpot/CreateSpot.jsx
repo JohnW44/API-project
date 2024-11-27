@@ -1,11 +1,9 @@
 import './CreateSpot.css';
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { createSpot, updateExistingSpot } from '../../store/spots';
 import { useModal } from '../../context/Modal';
-
-const DEFAULT_IMAGE = 'https://via.placeholder.com/300x200?text=No+Image';
 
 function CreateSpot() {
   const { spotId } = useParams();
@@ -22,11 +20,25 @@ function CreateSpot() {
     setFormErrors 
   } = useModal();
 
-  useEffect(() => {
+  const initializeForm = useCallback(() => {
     if (spotId && existingSpot) {
-      resetForm(existingSpot);
+      const formattedSpot = {
+        ...existingSpot,
+        previewImage: existingSpot.previewImage || '',
+        image1: existingSpot.image1 || '',
+        image2: existingSpot.image2 || '',
+        image3: existingSpot.image3 || '',
+        image4: existingSpot.image4 || ''
+      };
+      resetForm(formattedSpot);
+    } else {
+      resetForm();
     }
   }, [spotId, existingSpot, resetForm]);
+
+  useEffect(() => {
+    initializeForm();
+  }, [initializeForm]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,17 +52,26 @@ function CreateSpot() {
       price: parseFloat(formData.price)
     };
 
-    let response;
-    if (spotId) {
-      response = await dispatch(updateExistingSpot(spotId, spotData));
-    } else {
-      response = await dispatch(createSpot(spotData));
-    }
-
-    if (response.id) {
-      navigate(`/spots/${response.id}`);
-    } else if (response.errors) {
-      setFormErrors(response.errors);
+    try {
+      let response;
+      if (spotId) {
+        response = await dispatch(updateExistingSpot(spotId, spotData));
+        if (response && !response.errors) {
+          navigate(`/spots/${spotId}`);
+        } else if (response && response.errors) {
+          setFormErrors(response.errors);
+        }
+      } else {
+        response = await dispatch(createSpot(spotData));
+        if (response && response.id) {
+          navigate(`/spots/${response.id}`);
+        } else if (response && response.errors) {
+          setFormErrors(response.errors);
+        }
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setFormErrors({ submit: 'An error occurred while submitting the form' });
     }
   };
 
@@ -168,29 +189,32 @@ function CreateSpot() {
         <section>
           <h2>Liven up your spot with photos</h2>
           <p>Submit a link to at least one photo to publish your spot.</p>
-          <input
-            type="url"
-            value={formData.previewImage}
-            onChange={(e) => updateFormField('previewImage', e.target.value)}
-            placeholder="Preview Image URL"
-          />
-          {formData.previewImage && (
-            <div className="image-preview">
-              <img
-                src={formData.previewImage}
-                alt="Preview"
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = DEFAULT_IMAGE;
-                  setFormErrors(prev => ({
-                    ...prev,
-                    previewImage: "Failed to load image. Please check the URL"
-                  }));
-                }}
+          
+          {/* Preview/Main Image */}
+          <label>
+            Preview Image
+            <input
+              type="url"
+              value={formData.previewImage}
+              onChange={(e) => updateFormField('previewImage', e.target.value)}
+              placeholder="Preview Image URL (Required)"
+            />
+            {formErrors.previewImage && <p className="error">{formErrors.previewImage}</p>}
+          </label>
+
+          {/* Additional Images */}
+          {[1, 2, 3, 4].map((num) => (
+            <label key={num}>
+              Image {num}
+              <input
+                type="url"
+                value={formData[`image${num}`] || ''}
+                onChange={(e) => updateFormField(`image${num}`, e.target.value)}
+                placeholder={`Image ${num} URL (Optional)`}
               />
-            </div>
-          )}
-          {formErrors.previewImage && <p className="error">{formErrors.previewImage}</p>}
+              {formErrors[`image${num}`] && <p className="error">{formErrors[`image${num}`]}</p>}
+            </label>
+          ))}
         </section>
         <hr className="section-divider" />
 

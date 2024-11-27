@@ -1,5 +1,4 @@
-import { faker } from '@faker-js/faker';
-import { useEffect, useState, useMemo, useCallback, useRef } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchSpotDetails, fetchDeleteSpot } from '../../store/spots';
@@ -14,12 +13,12 @@ export function SpotDetails() {
   const navigate = useNavigate();
   
   const reviewsState = useSelector(state => state.reviews.state);
-  const spot = useSelector(state => state.spots.spotsObj[spotId]);
+  const spot = useSelector(state => state.spots.currentSpot);
+  const spotFromObj = useSelector(state => state.spots.spotsObj[spotId]);
+  const currentSpot = spot || spotFromObj;
   const currentUser = useSelector(state => state.session.user);
   const [isLoading, setIsLoading] = useState(true);
   
-  const dataFetchedRef = useRef(false);
-
   const reviewsArray = useMemo(() => {
     return Object.values(reviewsState.reviewsObj);
   }, [reviewsState.reviewsObj]);
@@ -56,29 +55,15 @@ export function SpotDetails() {
     [currentUser, isOwner, reviewsArray]
   );
 
-  const placeholderImages = useMemo(() => ({
-    main: 'https://via.placeholder.com/600x400?text=Main+Image',
-    secondary: {
-      1: 'https://via.placeholder.com/300x200?text=Image+2',
-      2: 'https://via.placeholder.com/300x200?text=Image+3',
-      3: 'https://via.placeholder.com/300x200?text=Image+4',
-      4: 'https://via.placeholder.com/300x200?text=Image+5'
-    }
-  }), []);
-
   useEffect(() => {
-    if (!dataFetchedRef.current) {
-      const fetchData = async () => {
-        setIsLoading(true);
-        await Promise.all([
-          dispatch(fetchSpotDetails(spotId)),
-          dispatch(fetchSpotReviews(spotId))
-        ]);
-        setIsLoading(false);
-        dataFetchedRef.current = true;
-      };
-      fetchData();
-    }
+    const loadSpotData = async () => {
+      setIsLoading(true);
+      await dispatch(fetchSpotDetails(spotId));
+      await dispatch(fetchSpotReviews(spotId));
+      setIsLoading(false);
+    };
+    
+    loadSpotData();
   }, [dispatch, spotId]);
 
   const handleDelete = async () => {
@@ -90,42 +75,65 @@ export function SpotDetails() {
     navigate(`/spots/${spotId}/edit`);
   };
 
+  const getImages = useCallback(() => {
+    if (!currentSpot) return [];
+    
+    const images = [];
+    
+    if (currentSpot.previewImage) images.push(currentSpot.previewImage);
+    if (currentSpot.image1) images.push(currentSpot.image1);
+    if (currentSpot.image2) images.push(currentSpot.image2);
+    if (currentSpot.image3) images.push(currentSpot.image3);
+    if (currentSpot.image4) images.push(currentSpot.image4);
+    
+    return images;
+  }, [currentSpot]);
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  if (!spot) {
+  if (!currentSpot) {
     return <div>Spot not found</div>;
   }
 
+  const images = getImages();
+
   return (
     <div className="spot-details">
-      <h1>{spot.name}</h1>
-      <p className="spot-location">{spot.city}, {spot.state}, {spot.country}</p>
-      <div className="spot-images">
+      <h1>{currentSpot.name}</h1>
+      <h3>{currentSpot.city}, {currentSpot.state}, {currentSpot.country}</h3>
+      
+      <div className="images-grid">
         <div className="main-image">
-          <img src={placeholderImages.main} alt={spot.name} />
+          <img 
+            src={images[0] || 'default-image-url'} 
+            alt="Preview"
+          />
         </div>
         <div className="secondary-images">
-          {Object.values(placeholderImages.secondary).map((image, index) => (
-            <div key={index} className="secondary-image">
-              <img src={image} alt={`${spot.name} ${index + 2}`} />
+          {images.slice(1, 5).map((imageUrl, index) => (
+            <div key={index} className="image-cell">
+              <img 
+                src={imageUrl || 'default-image-url'} 
+                alt={`Spot ${index + 1}`}
+              />
             </div>
           ))}
         </div>
       </div>
+      
       <div className="spot-details-container">
         <div className="spot-info">
-          <h2>Hosted by {spot.Owner?.firstName} {spot.Owner?.lastName}</h2>
-          <p>{spot.description}</p>
-          <p>{faker.lorem.paragraphs(3)}</p>
+          <h2>Hosted by {currentSpot.Owner?.firstName} {currentSpot.Owner?.lastName}</h2>
+          <p>{currentSpot.description}</p>
         </div>
         <div className="booking-box">
           <div className="booking-header">
-            <span className="price">${spot.price} / night</span>
+            <span className="price">${currentSpot.price} / night</span>
             <div className="rating-reviews">
-              <span className="rating">★ {formatRating(spot.avgStarRating)}</span>
-              <span className="reviews">· {spot.numReviews || 0} reviews</span>
+              <span className="rating">★ {formatRating(currentSpot.avgStarRating)}</span>
+              <span className="reviews">· {currentSpot.numReviews || 0} reviews</span>
             </div>
           </div>
         <button className="reserve-button" onClick={handleReserveClick}>Reserve</button>
@@ -135,7 +143,7 @@ export function SpotDetails() {
         <hr className="reviews-divider" />
         <div className="reviews-header">
           <div className="reviews-summary">
-            <h2 className='review-stars'>★ {formatRating(spot.avgStarRating)} · {spot.numReviews} reviews</h2>
+            <h2 className='review-stars'>★ {formatRating(currentSpot.avgStarRating)} · {currentSpot.numReviews} reviews</h2>
           </div>
           {canReview && (
             <div className="review-button-container">
