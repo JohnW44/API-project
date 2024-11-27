@@ -89,6 +89,7 @@ function CreateSpot() {
               type="text"
               value={formData.country || ''}
               onChange={(e) => updateFormField('country', e.target.value)}
+              placeholder="Country"
             />
           </label>
           <label>
@@ -98,6 +99,7 @@ function CreateSpot() {
               type="text"
               value={formData.address}
               onChange={(e) => updateFormField('address', e.target.value)}
+              placeholder="Street Address"
             />
           </label>
           <div className="city-state">
@@ -108,6 +110,7 @@ function CreateSpot() {
                 type="text"
                 value={formData.city}
                 onChange={(e) => updateFormField('city', e.target.value)}
+                placeholder="City"
               />
             </label>
             <label>
@@ -117,6 +120,7 @@ function CreateSpot() {
                 type="text"
                 value={formData.state}
                 onChange={(e) => updateFormField('state', e.target.value)}
+                placeholder="State"
               />
             </label>
           </div>
@@ -154,6 +158,7 @@ function CreateSpot() {
           <textarea
             value={formData.description}
             onChange={(e) => updateFormField('description', e.target.value)}
+            placeholder="Please write at least 30 characters"
           />
         </section>
         <hr className="section-divider" />
@@ -182,6 +187,7 @@ function CreateSpot() {
               onChange={(e) => updateFormField('price', e.target.value)}
               min="0"
               step="0.01"
+              placeholder="Price per night (USD)"
             />
           </label>
         </section>

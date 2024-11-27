@@ -25,12 +25,7 @@ const updateReviewAction = (review) => ({
   review
 });
 
-export const fetchSpotReviews = (spotId) => async (dispatch, getState) => {
-  const state = getState();
-  if (state.reviews.state.currentSpotReviews.length > 0) {
-    return;
-  }
-
+export const fetchSpotReviews = (spotId) => async (dispatch) => {
   const response = await fetch(`/api/spots/${spotId}/reviews`);
   
   if (response.ok) {
@@ -75,7 +70,10 @@ export const deleteReview = (reviewId) => async (dispatch) => {
 export const updateReview = (reviewData, reviewId) => async (dispatch) => {
   const response = await csrfFetch(`/api/reviews/${reviewId}`, {
     method: 'PUT',
-    body: JSON.stringify(reviewData)
+    body: JSON.stringify({
+      review: reviewData.review,
+      stars: parseInt(reviewData.stars)
+    })
   });
 
   if (response.ok) {

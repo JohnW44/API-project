@@ -17,9 +17,34 @@ function SignupFormModal() {
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
 
+  const areFieldsEmpty = () => {
+    return !email || !username || !firstName || !lastName || 
+           !password || !confirmPassword;
+  };
+
+  const validateFields = () => {
+    const newErrors = {};
+
+    if (!email) newErrors.email = "Email is required.";
+    if (!username) newErrors.username = "Username is required.";
+    if (!firstName) newErrors.firstName = "First name is required.";
+    if (!lastName) newErrors.lastName = "Last name is required.";
+    if (!password) {
+      newErrors.password = "Password is required.";
+    } else if (password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters long.";
+    }
+    if (password !== confirmPassword) {
+      newErrors.confirmPassword = "Passwords must match.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (password === confirmPassword) {
+    if (validateFields()) {
       setErrors({});
       return dispatch(
         sessionActions.signup({
@@ -30,19 +55,31 @@ function SignupFormModal() {
           password
         })
       )
-      .then(() => {
-        closeModal();
-      })
+      .then(closeModal)
       .catch(async (res) => {
         const data = await res.json();
-        if (data.errors) {
-          setErrors(data.errors);
+        console.log("backend validation errors", data);
+        if (data?.errors) {
+          const customErrors = {};
+          for (const [key, message] of Object.entries(data.errors)) {
+            switch (key) {
+              case 'email':
+                customErrors.email = "Please enter a valid email address.";
+                break;
+              case 'username':
+                customErrors.username = "Username must be unique and at least 4 characters.";
+                break;
+              case 'password':
+                customErrors.password = "Password must be at least 6 characters.";
+                break;
+              default:
+                customErrors[key] = message;
+            }
+          }
+          setErrors(customErrors);
         }
       });
     }
-    return setErrors({
-      confirmPassword: "Confirm Password field must be the same as the Password field"
-    });
   };
 
   return (
@@ -55,6 +92,7 @@ function SignupFormModal() {
             type="text"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            placeholder="Email"
             required
           />
         </label>
@@ -65,6 +103,7 @@ function SignupFormModal() {
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            placeholder="Choose a username"
             required
           />
         </label>
@@ -75,6 +114,7 @@ function SignupFormModal() {
             type="text"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
+            placeholder="First Name"
             required
           />
         </label>
@@ -85,6 +125,7 @@ function SignupFormModal() {
             type="text"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
+            placeholder="Last Name"
             required
           />
         </label>
@@ -95,6 +136,7 @@ function SignupFormModal() {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            placeholder="Choose a strong password"
             required
           />
         </label>
@@ -105,11 +147,14 @@ function SignupFormModal() {
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
+            placeholder="Confirm your password"
             required
           />
         </label>
         {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
-        <button type="submit">Sign Up</button>
+        <button type="submit" disabled={areFieldsEmpty()}>
+          Sign Up
+        </button>
       </form>
     </div>
   );

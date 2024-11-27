@@ -3,12 +3,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { fetchSpots, fetchDeleteSpot } from '../../store/spots';
 import './ManageSpots.css';
+import { useModal } from '../../context/Modal';
+import DeleteSpotModal from '../DeleteSpot/DeleteSpotModal';
 
 function ManageSpots() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const currentUser = useSelector(state => state.session.user);
   const spotsObj = useSelector(state => state.spots.spotsObj);
+  const { setModalContent } = useModal();
   
   const userSpots = useMemo(() => 
     Object.values(spotsObj).filter(spot => 
@@ -21,10 +24,14 @@ function ManageSpots() {
     navigate(`/spots/${spotId}`);
   }, [navigate]);
 
-  const handleDelete = useCallback(async (e, spotId) => {
+  const handleDelete = useCallback((e, spotId) => {
     e.stopPropagation();
-    await dispatch(fetchDeleteSpot(spotId));
-  }, [dispatch]);
+    setModalContent(
+      <DeleteSpotModal 
+        onConfirm={() => dispatch(fetchDeleteSpot(spotId))}
+      />
+    );
+  }, [dispatch, setModalContent]);
 
   const handleUpdate = useCallback((e, spotId) => {
     e.stopPropagation();
@@ -65,13 +72,7 @@ function ManageSpots() {
           <div className="listing-location">
             {spot.city}, {spot.state}
           </div>
-          <div className="listing-price">
-            ${spot.price} / night
-          </div>
-          <div className="listing-rating">
-            ★ {spot.avgRating || 'New'}
-          </div>
-          {!isSpotOwner && (
+          {isSpotOwner && (
             <div className="spot-actions">
               <button 
                 onClick={(e) => handleUpdate(e, spot.id)}
@@ -87,6 +88,12 @@ function ManageSpots() {
               </button>
             </div>
           )}
+          <div className="listing-price">
+            ${spot.price} / night
+          </div>
+          <div className="listing-rating">
+            ★ {spot.avgRating || 'New'}
+          </div>
         </div>
       </div>
     );

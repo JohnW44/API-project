@@ -5,6 +5,8 @@ import { fetchSpotDetails, fetchDeleteSpot } from '../../store/spots';
 import { fetchSpotReviews, deleteReview } from '../../store/reviews';
 import OpenModalButton from '../OpenModalButton/OpenModalButton';
 import PostReviewModal from '../PostReviewModal/PostReviewModal';
+import { useModal } from '../../context/Modal';
+import DeleteReviewModal from '../DeleteReviewModal/DeleteReviewModal';
 import './SpotDetails.css';
 
 export function SpotDetails() {
@@ -39,11 +41,22 @@ export function SpotDetails() {
     alert("Feature Coming Soon...");
   }, []);
 
-  const handleDeleteReview = useCallback(async (reviewId) => {
-    await dispatch(deleteReview(reviewId));
-    await dispatch(fetchSpotReviews(spotId));
-    await dispatch(fetchSpotDetails(spotId));
-  }, [dispatch, spotId]);
+  const { setModalContent } = useModal();
+
+  const handleDeleteReview = useCallback((e, reviewId) => {
+    e.preventDefault();
+    setModalContent(
+      <DeleteReviewModal 
+        onConfirm={() => {
+          dispatch(deleteReview(reviewId))
+            .then(() => {
+              dispatch(fetchSpotReviews(spotId));
+              dispatch(fetchSpotDetails(spotId));
+            });
+        }}
+      />
+    );
+  }, [dispatch, spotId, setModalContent]);
 
   const isOwner = useMemo(() => 
     currentUser && spot && currentUser.id === spot.ownerId,
@@ -143,7 +156,10 @@ export function SpotDetails() {
         <hr className="reviews-divider" />
         <div className="reviews-header">
           <div className="reviews-summary">
-            <h2 className='review-stars'>★ {formatRating(currentSpot.avgStarRating)} · {currentSpot.numReviews} reviews</h2>
+            <h2 className='review-stars'>
+              ★ {formatRating(currentSpot.avgStarRating)} · 
+              {currentSpot.numReviews === 1 ? '1 review' : `${currentSpot.numReviews} reviews`}
+            </h2>
           </div>
           {canReview && (
             <div className="review-button-container">
@@ -161,6 +177,7 @@ export function SpotDetails() {
               <div key={review.id} className="review-item">
                 <h3>{review.User?.firstName || 'Anonymous'}</h3>
                 <p className="review-date">{formatDate(review.createdAt)}</p>
+                <p className="review-stars">★ {review.stars}</p>
                 <p className="review-text">{review.review || 'No review text'}</p>
                 {currentUser && 
                  review.userId === currentUser.id && 
@@ -172,7 +189,7 @@ export function SpotDetails() {
                       className="edit-review-button"
                     />
                     <button 
-                      onClick={() => handleDeleteReview(review.id)}
+                      onClick={(e) => handleDeleteReview(e, review.id)}
                       className="delete-review-button"
                     >
                       Delete Review

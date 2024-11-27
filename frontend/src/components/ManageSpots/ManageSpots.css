@@ -41,7 +41,7 @@
 .spot-actions {
   display: flex;
   gap: 10px;
-  margin-top: 10px;
+  margin: 10px 0;
 }
 
 .update-button,

@@ -220,6 +220,11 @@ p {
   line-height: 1.5;
 }
 
+.review-stars {
+  color: rgb(218, 218, 37);
+  font-weight: 600;
+}
+
 .review-actions {
   display: flex;
   gap: 10px;

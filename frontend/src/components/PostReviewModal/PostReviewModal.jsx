@@ -12,7 +12,7 @@ function PostReviewModal({ spotId, review: existingReview }) {
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setErrors({});
 
@@ -25,24 +25,19 @@ function PostReviewModal({ spotId, review: existingReview }) {
       return;
     }
 
-    let response;
-    if (existingReview) {
-      response = await dispatch(updateReview({
-        review,
-        stars
-      }, existingReview.id));
-    } else {
-      response = await dispatch(createReview({
-        review,
-        stars
-      }, spotId));
-    }
-
-    if (response) {
-      await dispatch(fetchSpotReviews(spotId));
-      await dispatch(fetchSpotDetails(spotId));
-      closeModal();
-    }
+    const reviewData = { review, stars };
+    
+    return dispatch(
+      existingReview 
+        ? updateReview(reviewData, existingReview.id)
+        : createReview(reviewData, spotId)
+    )
+      .then(() => dispatch(fetchSpotReviews(spotId)))
+      .then(() => dispatch(fetchSpotDetails(spotId)))
+      .then(closeModal)
+      .catch(error => {
+        console.log("Error submitting review:", error);
+      });
   };
 
   return (
