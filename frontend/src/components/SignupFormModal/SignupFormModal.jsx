@@ -2,14 +2,12 @@
 
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { useModal } from '../../context/Modal'
 import './SignupForm.css';
 import * as sessionActions from '../../store/session';
 
 function SignupFormModal() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -34,7 +32,6 @@ function SignupFormModal() {
       )
       .then(() => {
         closeModal();
-        navigate('/');
       })
       .catch(async (res) => {
         const data = await res.json();
