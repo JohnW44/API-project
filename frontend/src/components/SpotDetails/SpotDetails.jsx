@@ -7,6 +7,7 @@ import OpenModalButton from '../OpenModalButton/OpenModalButton';
 import PostReviewModal from '../PostReviewModal/PostReviewModal';
 import { useModal } from '../../context/Modal';
 import DeleteReviewModal from '../DeleteReviewModal/DeleteReviewModal';
+import DeleteSpotModal from '../DeleteSpot/DeleteSpotModal';
 import './SpotDetails.css';
 
 export function SpotDetails() {
@@ -79,10 +80,16 @@ export function SpotDetails() {
     loadSpotData();
   }, [dispatch, spotId]);
 
-  const handleDelete = async () => {
-    await dispatch(fetchDeleteSpot(spotId));
-    navigate('/spots/manage');
-  };
+  const handleDelete = useCallback(() => {
+    setModalContent(
+      <DeleteSpotModal 
+        onConfirm={() => {
+          dispatch(fetchDeleteSpot(spotId))
+            .then(() => navigate('/spots/manage'));
+        }}
+      />
+    );
+  }, [dispatch, spotId, navigate, setModalContent]);
 
   const handleEdit = () => {
     navigate(`/spots/${spotId}/edit`);
