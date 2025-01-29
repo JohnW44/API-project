@@ -3,6 +3,22 @@ body, html {
   margin: 0;
   padding: 0;
   width: 100%;
+  background-color: #dce6e1;
+  z-index: 4;
+}
+
+.topnav {
+  background-color: #dce6e1;
+  color:rgb(189, 0, 44);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 25px;
+  height: 80px;
+  width: 100%; 
+  box-sizing: border-box; 
+  position: fixed; 
+  z-index: 4;
 }
 
 .profileBtn {
@@ -18,18 +34,6 @@ body, html {
   cursor: pointer;
 }
 
-.topnav {
-  background-color: #dce6e1;
-  color:rgb(189, 0, 44);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  height: 80px;
-  width: 100%; 
-  box-sizing: border-box; 
-  position: fixed; 
-}
 
 .left-section {
   display: flex;
